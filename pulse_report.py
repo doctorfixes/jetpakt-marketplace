@@ -21,7 +21,8 @@ from reportlab.platypus import (
 from pulse_engine import PulseInsight
 from scan_pdf import (
     BORDER, CREAM, ERROR, MUTED, TEAL, TEAL_DEEP, TEXT, WARN,
-    build_styles, register_fonts, safe_para_text, severity_chip,
+    _draw_wordmark_footer, build_styles, register_fonts, safe_para_text,
+    severity_chip,
 )
 
 
@@ -55,7 +56,7 @@ def _pulse_page_decor(canvas, doc, account_name: str, cadence: str,
     footer = (f"{jetpakt_contact['name']} · "
               f"{jetpakt_contact['email']} · {jetpakt_contact['site']}")
     canvas.drawString(0.6 * inch, 0.35 * inch, footer)
-    canvas.drawRightString(w - 0.6 * inch, 0.35 * inch, f"Page {doc.page}")
+    _draw_wordmark_footer(canvas, w, doc.page)
     canvas.restoreState()
 
 

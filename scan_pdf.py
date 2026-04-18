@@ -33,6 +33,7 @@ from reportlab.platypus import (
 # ---------- Palette ----------
 
 CREAM = HexColor("#F7F6F2")
+WORDMARK_GOLD = HexColor("#B99760")  # muted champagne-gold for wordmark watermark
 SURFACE = HexColor("#FBFBF9")
 BORDER = HexColor("#D4D1CA")
 TEXT = HexColor("#28251D")
@@ -325,9 +326,45 @@ def _page_decor(canvas, doc, business_name: str, jetpakt_contact: dict[str, str]
                 f"{jetpakt_contact['email']} · "
                 f"{jetpakt_contact['site']}")
     canvas.drawString(0.6 * inch, 0.35 * inch, footer_l)
-    canvas.drawRightString(w - 0.6 * inch, 0.35 * inch,
-                           f"Page {doc.page}")
+    _draw_wordmark_footer(canvas, w, doc.page)
     canvas.restoreState()
+
+
+def _draw_wordmark_footer(canvas, w: float, page_num: int) -> None:
+    """Draw 'JetPakt \u00b7 Page N' in the bottom-right.
+
+    'JetPakt' renders in Instrument Serif muted gold; divider and page number
+    render in Inter muted gray. Right-aligned to match the header brand lockup.
+    """
+    right_x = w - 0.6 * inch
+    y = 0.35 * inch
+    page_text = f" \u00b7 Page {page_num}"
+    # Measure so the composite line sits flush-right
+    try:
+        canvas.setFont("Inter", 8)
+    except Exception:
+        canvas.setFont("Helvetica", 8)
+    page_w = canvas.stringWidth(page_text, canvas._fontname, 8)
+    try:
+        canvas.setFont("InstrumentSerif", 10)
+        wordmark_font = "InstrumentSerif"
+    except Exception:
+        canvas.setFont("Helvetica-Bold", 10)
+        wordmark_font = "Helvetica-Bold"
+    wordmark_w = canvas.stringWidth("JetPakt", wordmark_font, 10)
+    start_x = right_x - wordmark_w - page_w
+    # Draw wordmark
+    canvas.setFillColor(WORDMARK_GOLD)
+    canvas.setFont(wordmark_font, 10)
+    # Baseline nudge: serif at 10pt vs sans at 8pt — align optical baselines
+    canvas.drawString(start_x, y - 0.5, "JetPakt")
+    # Draw divider + page number
+    canvas.setFillColor(MUTED)
+    try:
+        canvas.setFont("Inter", 8)
+    except Exception:
+        canvas.setFont("Helvetica", 8)
+    canvas.drawString(start_x + wordmark_w, y, page_text)
 
 
 # ---------- Section builders ----------
