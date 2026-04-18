@@ -5,7 +5,7 @@
 - **Neighborhood:** West Arvada
 - **Rating at audit:** 3.1
 - **Routing:** ryan_drafts
-- **Generated:** 2026-04-18T15:26:29.067461Z
+- **Generated:** 2026-04-18T15:34:01.971840Z
 
 ---
 
@@ -33,5 +33,5 @@ More detail at https://poetic-melba-f04633.netlify.app if useful.
 
 — Ryan B.
 JetPakt · Denver
-303-549-1697 · gojetpakt.us@outlook.com
+gojetpakt.us@outlook.com
 Gojetpakt.com

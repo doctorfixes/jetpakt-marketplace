@@ -30,7 +30,7 @@ from datetime import datetime
 # ---------------------------------------------------------------------------
 RYAN_SIGNATURE = """Ryan B.
 JetPakt · Denver
-303-549-1697 · gojetpakt.us@outlook.com
+gojetpakt.us@outlook.com
 Gojetpakt.com"""
 
 SITE_URL = "https://poetic-melba-f04633.netlify.app"

@@ -164,7 +164,6 @@ def big_daddys_scan():
         contact_email="",  # CRM has no email; outreach will go via phone + mail
         jetpakt_contact={
             "name": "Ryan B.",
-            "phone": "303-549-1697",
             "email": "gojetpakt.us@outlook.com",
             "site": "Gojetpakt.com",
         },

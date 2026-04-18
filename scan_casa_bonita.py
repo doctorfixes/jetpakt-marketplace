@@ -142,7 +142,6 @@ def casa_bonita_scan():
         contact_email="info@casabonitadenver.com",
         jetpakt_contact={
             "name": "Ryan B.",
-            "phone": "303-549-1697",
             "email": "gojetpakt.us@outlook.com",
             "site": "Gojetpakt.com",
         },

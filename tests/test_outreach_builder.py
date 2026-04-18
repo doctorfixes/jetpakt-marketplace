@@ -106,7 +106,8 @@ def test_build_draft_includes_quote_and_signature():
     assert d.legal_flag_severity == "HIGH"
     assert '"The 22% automatic service fee was not disclosed."' in d.body
     assert "Ryan B." in d.body
-    assert "303-549-1697" in d.body
+    assert "gojetpakt.us@outlook.com" in d.body
+    assert "303-549-1697" not in d.body  # phone removed from all messaging
     assert d.to_email == ""  # always empty — user fills
 
 

@@ -75,7 +75,7 @@ _BOILERPLATE_CLOSING_HTML = (
     "public reviews available in the attached PDF."
     "</p>"
     '<p style="color:#6b6b6b;font-size:12px">'
-    "Ryan B. · 303-549-1697 · "
+    "Ryan B. · "
     '<a href="mailto:gojetpakt.us@outlook.com">gojetpakt.us@outlook.com</a> · '
     '<a href="https://Gojetpakt.com">Gojetpakt.com</a>'
     "</p>"
@@ -86,7 +86,7 @@ _BOILERPLATE_CLOSING_TEXT = (
     "reputation signals. We never solicit, reply to, or respond to reviews "
     "without your explicit approval. Every claim above is tied to verbatim "
     "public reviews available in the attached PDF.\n\n"
-    "Ryan B. · 303-549-1697 · gojetpakt.us@outlook.com · Gojetpakt.com\n"
+    "Ryan B. · gojetpakt.us@outlook.com · Gojetpakt.com\n"
 )
 
 

@@ -52,7 +52,7 @@ def _pulse_page_decor(canvas, doc, account_name: str, cadence: str,
         canvas.setFont("Inter", 8)
     except Exception:
         canvas.setFont("Helvetica", 8)
-    footer = (f"{jetpakt_contact['name']} · {jetpakt_contact['phone']} · "
+    footer = (f"{jetpakt_contact['name']} · "
               f"{jetpakt_contact['email']} · {jetpakt_contact['site']}")
     canvas.drawString(0.6 * inch, 0.35 * inch, footer)
     canvas.drawRightString(w - 0.6 * inch, 0.35 * inch, f"Page {doc.page}")
@@ -259,7 +259,6 @@ def render_pulse_pdf(insight: PulseInsight, output_path: str | Path) -> str:
 
     jetpakt_contact = {
         "name": "Ryan B.",
-        "phone": "303-549-1697",
         "email": "gojetpakt.us@outlook.com",
         "site": "Gojetpakt.com",
     }

@@ -920,7 +920,6 @@ def westrail_fixture() -> dict[str, Any]:
         contact_email="westrail.events@gmail.com",
         jetpakt_contact={
             "name": "Ryan B.",
-            "phone": "303-549-1697",
             "email": "gojetpakt.us@outlook.com",
             "site": "Gojetpakt.com",
         },

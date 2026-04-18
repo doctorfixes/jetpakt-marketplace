@@ -144,7 +144,6 @@ def blue_bonnet_scan():
         contact_email="bluebonnetcafe1@yahoo.com",
         jetpakt_contact={
             "name": "Ryan B.",
-            "phone": "303-549-1697",
             "email": "gojetpakt.us@outlook.com",
             "site": "Gojetpakt.com",
         },

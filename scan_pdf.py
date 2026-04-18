@@ -322,7 +322,6 @@ def _page_decor(canvas, doc, business_name: str, jetpakt_contact: dict[str, str]
     except Exception:
         canvas.setFont("Helvetica", 8)
     footer_l = (f"{jetpakt_contact['name']} · "
-                f"{jetpakt_contact['phone']} · "
                 f"{jetpakt_contact['email']} · "
                 f"{jetpakt_contact['site']}")
     canvas.drawString(0.6 * inch, 0.35 * inch, footer_l)
@@ -980,8 +979,7 @@ def _upsell_section(scan: dict[str, Any], S: dict[str, ParagraphStyle]) -> list:
     cta = (
         f"Ready to move to Monthly Essentials or run this on another "
         f"location? Reach {c['name']} at "
-        f'<a href="mailto:{c["email"]}" color="#01696F">{c["email"]}</a> '
-        f"or {c['phone']}."
+        f'<a href="mailto:{c["email"]}" color="#01696F">{c["email"]}</a>.'
     )
     story.append(Paragraph(cta, S["body"]))
 

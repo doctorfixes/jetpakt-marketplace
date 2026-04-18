@@ -135,7 +135,6 @@ def hampton_social_scan():
         contact_email="denver@thehamptonsocial.com",
         jetpakt_contact={
             "name": "Ryan B.",
-            "phone": "303-549-1697",
             "email": "gojetpakt.us@outlook.com",
             "site": "Gojetpakt.com",
         },

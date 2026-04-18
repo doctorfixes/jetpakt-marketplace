@@ -137,7 +137,6 @@ def hey_kiddo_scan():
         contact_email="hello@heykiddo.com",
         jetpakt_contact={
             "name": "Ryan B.",
-            "phone": "303-549-1697",
             "email": "gojetpakt.us@outlook.com",
             "site": "Gojetpakt.com",
         },
