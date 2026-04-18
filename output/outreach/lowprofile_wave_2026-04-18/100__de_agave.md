@@ -6,7 +6,7 @@
 - Rating at audit: 3.1
 - Review count: 298
 - Routing: ryan_drafts
-- Generated: 2026-04-18T18:15:41.866684Z
+- Generated: 2026-04-18T19:24:41.175753Z
 
 ---
 
@@ -17,6 +17,8 @@ SUBJECT: A drift pattern in 100% de Agave reviews
 ---
 
 Hi,
+
+Quick note on why this is landing in your inbox: I read the public review record for independent restaurants and look for operating drift before it turns into a rating drop. No purchased lists, no guesses, no staff named.
 
 Before the drift, the good news. Reading 298 public reviews of 100% de Agave, the theme that keeps showing up in positive reviews is margarita variety and fun drink menu. One recent quote:
 
@@ -30,7 +32,7 @@ This is an inconsistency signal, not a quality verdict. It tends to compound qui
 
 I run JetPakt Solutions. The product is a drift diagnosis for independent restaurants: five operating pillars, matched Restaurant Operating System case, and a defensible revenue-recovery range tied to verbatim public reviews.
 
-I would like to send you a free one-page preview: the dominant pillar this quarter, the matched case, and one verbatim quote supporting it. No sales call, no follow up, no CRM entry.
+I would like to send you a free one-page preview: the dominant pillar this quarter, the matched case, and one verbatim quote supporting it. No sales call, no pushy follow up.
 
 Reply "yes" and you will have it within two business days. If not, we are done.
 
@@ -40,3 +42,4 @@ Every finding I share is anchored to a verbatim public quote. I never name staff
 
 Ryan B., JetPakt Solutions
 gojetpakt.us@outlook.com  ·  gojetpakt.com
+PO Box pending  ·  Denver, CO

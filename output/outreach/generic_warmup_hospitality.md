@@ -16,6 +16,8 @@ SUBJECT: Most restaurants fail from quiet drift
 
 Hi,
 
+Quick note on why this is landing in your inbox: I read the public review record for independent restaurants and look for operating drift before it turns into a rating drop. No purchased lists, no guesses, no staff named.
+
 Most independent restaurants do not fail from one big mistake. They fail from quiet operating drift that compounds over a couple of quarters, four or five reviews at a time, until the rating slips a third of a star and the owner is the last person with the time to read the last ninety reviews end-to-end.
 
 That is the problem I work on. I run JetPakt Solutions, a small practice that reads the public review record for independent owner-operators and returns a short Operator Memo: the dominant operating drift this quarter, a matched Restaurant Operating System case, a conservative monthly revenue-recovery range, and a 30/60/90-day action plan tied to the case.
@@ -38,3 +40,4 @@ Thanks for the minute.
 
 Ryan B., JetPakt Solutions
 gojetpakt.us@outlook.com  ·  gojetpakt.com
+PO Box pending  ·  Denver, CO

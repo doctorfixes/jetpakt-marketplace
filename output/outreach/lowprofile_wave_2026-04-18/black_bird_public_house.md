@@ -6,7 +6,7 @@
 - Rating at audit: 3.3
 - Review count: 312
 - Routing: ryan_drafts
-- Generated: 2026-04-18T18:15:41.866785Z
+- Generated: 2026-04-18T19:24:41.175863Z
 
 ---
 
@@ -18,7 +18,9 @@ SUBJECT: A pattern in Black Bird reviews
 
 Hi,
 
-Before the drift, the good news. Reading 312 public reviews of Black Bird Public House, the theme that keeps showing up in positive reviews is a patio that feels like a getaway. One recent quote:
+Quick note on why this is landing in your inbox: I read the public review record for independent restaurants and look for operating drift before it turns into a rating drop. No purchased lists, no guesses, no staff named.
+
+Before the drift, the good news. Reading 312 public reviews of Black Bird Public House, the theme that keeps showing up in positive reviews is patio that feels like a getaway. One recent quote:
 
     "The patio honestly transports you somewhere far from Denver."
 
@@ -30,7 +32,7 @@ It shows up more in weekend reviews than weekday, which is a schedulable pattern
 
 I run JetPakt Solutions. The product is a drift diagnosis for independent restaurants: five operating pillars, matched Restaurant Operating System case, and a defensible revenue-recovery range tied to verbatim public reviews.
 
-I would like to send you a free one-page preview: the dominant pillar this quarter, the matched case, and one verbatim quote supporting it. No sales call, no follow up, no CRM entry.
+I would like to send you a free one-page preview: the dominant pillar this quarter, the matched case, and one verbatim quote supporting it. No sales call, no pushy follow up.
 
 Reply "yes" and you will have it within two business days. If not, we are done.
 
@@ -40,3 +42,4 @@ Every finding I share is anchored to a verbatim public quote. I never name staff
 
 Ryan B., JetPakt Solutions
 gojetpakt.us@outlook.com  ·  gojetpakt.com
+PO Box pending  ·  Denver, CO

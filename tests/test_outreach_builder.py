@@ -237,13 +237,54 @@ def test_build_draft_subject_uses_drift_pattern_prefix():
     assert d.subject.startswith("A drift pattern in ")
 
 
-def test_build_draft_signature_is_two_lines():
+def test_build_draft_signature_has_identity_contact_and_postal_address():
+    """v3.1: three-line signature. Identity + email/site + postal address.
+
+    CAN-SPAM (16 CFR §316.5) requires a physical postal address on every
+    commercial email. The postal address line is the third line of the
+    signature and must always be present, even when set to the pending
+    placeholder for drafts in review.
+    """
     d = build_draft(_example_row())
-    # The signature appears at the very end of the body.
-    sig_lines = d.body.rstrip().split("\n")[-2:]
+    sig_lines = d.body.rstrip().split("\n")[-3:]
     assert sig_lines[0] == "Ryan B., JetPakt Solutions"
     assert "gojetpakt.us@outlook.com" in sig_lines[1]
     assert "gojetpakt.com" in sig_lines[1]
+    # Third line = postal address. Either real PO Box or the pending placeholder.
+    assert sig_lines[2].strip() != ""
+    assert ("PO Box" in sig_lines[2]) or ("P.O. Box" in sig_lines[2])
+
+
+def test_build_draft_body_includes_provenance_lead():
+    """Every draft must explain why it landed in the recipient's inbox."""
+    d = build_draft(_example_row())
+    assert "why this is landing in your inbox" in d.body
+    assert "No purchased lists" in d.body
+
+
+def test_build_draft_offer_softer_no_followup_phrasing():
+    """v3.1: 'No sales call, no pushy follow up' replaces the harsher
+    'no follow up, no CRM entry' line, which read as over-promising to
+    recipients primed to distrust marketing copy.
+    """
+    d = build_draft(_example_row())
+    assert "No sales call, no pushy follow up" in d.body
+    assert "no CRM entry" not in d.body
+
+
+def test_build_draft_blocks_inflammatory_mocking_quotes():
+    """Quotes like 'worse than a frozen Totinos' are hard-blocked by
+    QUOTE_BLOCKED_TOKENS: even though they are verbatim public content,
+    they read as mockery when quoted back at the owner.
+    """
+    row = _example_row()
+    row["Verbatim Excerpts (top 2)"] = (
+        "Pizza is worse than a frozen Totinos. || Cold and undercooked."
+    )
+    d = build_draft(row)
+    assert "worse than a frozen Totinos" not in d.body
+    # Cleaner backup quote is used instead.
+    assert "Cold and undercooked" in d.body
 
 
 def test_build_draft_offer_is_binary():

@@ -36,12 +36,19 @@ from datetime import datetime
 
 
 # ---------------------------------------------------------------------------
-# Signature — two lines only. Identity preserved; phone intentionally omitted
-# per operator request.
+# Signature — identity + CAN-SPAM-compliant postal address. Phone intentionally
+# omitted per operator request.
+#
+# POSTAL_ADDRESS: Required by CAN-SPAM 16 CFR §316.5 for any commercial email.
+# Set this the moment the P.O. Box is active. Leaving it as a placeholder is
+# acceptable for drafts in review, but NOT for outbound sends.
 # ---------------------------------------------------------------------------
+POSTAL_ADDRESS = "PO Box pending  \u00b7  Denver, CO"  # TODO: replace once USPS box is issued
+
 RYAN_SIGNATURE = (
     "Ryan B., JetPakt Solutions\n"
-    "gojetpakt.us@outlook.com  \u00b7  gojetpakt.com"
+    "gojetpakt.us@outlook.com  \u00b7  gojetpakt.com\n"
+    "{postal_address}"
 )
 
 SITE_URL = "https://poetic-melba-f04633.netlify.app"
@@ -62,8 +69,19 @@ SUBJECT_MAX_CHARS = 45
 # ---------------------------------------------------------------------------
 # Body fragments (no em-dashes, no ellipsis from source).
 # ---------------------------------------------------------------------------
+# Provenance lead. Added to every opener so the recipient knows exactly why
+# they are getting this email and what we did. Reduces the "cold, surveilled"
+# feeling and is honest about the public-only source material.
+PROVENANCE_LEAD = (
+    "Quick note on why this is landing in your inbox: I read the public "
+    "review record for independent restaurants and look for operating "
+    "drift before it turns into a rating drop. No purchased lists, no "
+    "guesses, no staff named.\n\n"
+)
+
 OPENING = (
     "Hi,\n\n"
+    + PROVENANCE_LEAD +
     "Reading the last {review_count} public reviews of {name}, the same "
     "operating signal is repeating. It reads as a {pillar_name}-pillar "
     "drift, specifically Restaurant Operating System case {case_id} "
@@ -72,6 +90,7 @@ OPENING = (
 
 OPENING_NO_COUNT = (
     "Hi,\n\n"
+    + PROVENANCE_LEAD +
     "Reading your public reviews of {name}, the same operating signal is "
     "repeating. It reads as a {pillar_name}-pillar drift, specifically "
     "Restaurant Operating System case {case_id} ({case_oneliner}). Here "
@@ -83,6 +102,7 @@ OPENING_NO_COUNT = (
 # rather than a cold pitch. Both quotes are verbatim public review content.
 POSITIVE_OPENER_WITH_COUNT = (
     "Hi,\n\n"
+    + PROVENANCE_LEAD +
     "Before the drift, the good news. Reading {review_count} public reviews "
     "of {name}, the theme that keeps showing up in positive reviews is "
     "{positive_theme}. One recent quote:"
@@ -90,6 +110,7 @@ POSITIVE_OPENER_WITH_COUNT = (
 
 POSITIVE_OPENER_NO_COUNT = (
     "Hi,\n\n"
+    + PROVENANCE_LEAD +
     "Before the drift, the good news. Reading your public reviews of "
     "{name}, the theme that keeps showing up in positive reviews is "
     "{positive_theme}. One recent quote:"
@@ -197,7 +218,7 @@ OFFER = (
     "to verbatim public reviews.\n\n"
     "I would like to send you a free one-page preview: the dominant "
     "pillar this quarter, the matched case, and one verbatim quote "
-    "supporting it. No sales call, no follow up, no CRM entry.\n\n"
+    "supporting it. No sales call, no pushy follow up.\n\n"
     "Reply \"yes\" and you will have it within two business days. If not, "
     "we are done.\n\n"
     "If the preview is useful, the full $49 Drift Diagnosis (Operator "
@@ -286,6 +307,16 @@ QUOTE_BLOCKED_TOKENS = [
     "going down with",
     "went down with",
     "0/10",  # reads as a drive-by rating, not a content signal
+    "worse than a frozen",  # mocking comparisons feel like a threat when quoted back
+    "worse than frozen",
+    "tastes worse",
+    "disgusting",
+    "makes me sick",
+    "worst pizza",
+    "worst meal",
+    "worst restaurant",
+    "trash",
+    "garbage",
 ]
 
 # Positive quotes also pass through the defamation/safety filter; in addition,
@@ -606,7 +637,7 @@ def build_draft(row: dict) -> OutreachDraft:
     parts.append("\n\n")
     parts.append(GUARDRAIL_FOOTER)
     parts.append("\n\n")
-    parts.append(RYAN_SIGNATURE)
+    parts.append(RYAN_SIGNATURE.format(postal_address=POSTAL_ADDRESS))
 
     body = "".join(parts)
     body = _strip_em_dashes_outside_quotes(body)
