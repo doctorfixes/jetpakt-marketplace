@@ -11,9 +11,12 @@
       "branch": "main",
       "publish_dir": "jetpakt-site",
       "purpose": "Public marketing landing page",
-      "custom_domain": null,
-      "custom_domain_note": "gojetpakt.com is held by another Netlify site. Using .netlify.app slug only for now.",
-      "suggested_rename_slugs": ["jetpakt-pulse", "jetpakt-pilot", "gojetpakt-pilot"],
+      "custom_domain": "gojetpakt.com",
+      "custom_domain_canonical": "https://gojetpakt.com",
+      "www_redirect": "https://www.gojetpakt.com -> https://gojetpakt.com (301)",
+      "ssl": "Netlify managed, HSTS enabled",
+      "custom_domain_verified_at": "2026-04-18",
+      "custom_domain_note": "Domain attached to this site and serving identical content (verified via matching etag + md5 against the .netlify.app slug).",
       "first_deployed": "2026-04-18"
     }
   ]
