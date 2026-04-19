@@ -1,0 +1,84 @@
+{
+  "generated_at": "2026-04-19T14:05:40+00:00",
+  "clients_append": [
+    {
+      "row_object": {
+        "client_id": "client_641e0a12",
+        "prospect_id": "arvada_3_sons_italian",
+        "business_name": "3 Sons Italian",
+        "contact_email": "info@3sonsitalian.com",
+        "stripe_customer_id": "cus_TEST_pulse_essentials",
+        "stripe_subscription_id": "sub_TEST_essentials_01",
+        "tier": "Pulse Essentials",
+        "cadence": "monthly",
+        "mrr_usd": "149",
+        "status": "Active",
+        "onboarded_at": "2026-04-19T14:05:40+00:00",
+        "next_deliverable_due": "2026-05-19T09:00:00+00:00",
+        "last_memo_sent_at": "",
+        "last_memo_file": "",
+        "cancellation_reason": "",
+        "notes": "Onboarded 2026-04-19T14:05:40+00:00. Product=prod_UMDbLrW0doOHPI.",
+        "created_at": "2026-04-19T14:05:40+00:00",
+        "updated_at": "2026-04-19T14:05:40+00:00"
+      },
+      "positional_row": [
+        "client_641e0a12",
+        "arvada_3_sons_italian",
+        "3 Sons Italian",
+        "info@3sonsitalian.com",
+        "cus_TEST_pulse_essentials",
+        "sub_TEST_essentials_01",
+        "Pulse Essentials",
+        "monthly",
+        "149",
+        "Active",
+        "2026-04-19T14:05:40+00:00",
+        "2026-05-19T09:00:00+00:00",
+        "",
+        "",
+        "",
+        "Onboarded 2026-04-19T14:05:40+00:00. Product=prod_UMDbLrW0doOHPI.",
+        "2026-04-19T14:05:40+00:00",
+        "2026-04-19T14:05:40+00:00"
+      ]
+    }
+  ],
+  "prospect_updates": [
+    {
+      "find": {
+        "column": "A",
+        "value": "arvada_3_sons_italian"
+      },
+      "set": {
+        "stage": "Client",
+        "stage_entered_at": "2026-04-19T14:05:40+00:00",
+        "notes_append": "Converted to Client 2026-04-19T14:05:40+00:00 (Pulse Essentials monthly $149/mo)",
+        "updated_at": "2026-04-19T14:05:40+00:00"
+      }
+    }
+  ],
+  "outlook_drafts": [
+    {
+      "action": "draft_email",
+      "to": [
+        "info@3sonsitalian.com"
+      ],
+      "cc": [],
+      "bcc": [],
+      "subject": "Pulse Essentials is active",
+      "body": "Welcome to JetPakt.\n\nYour Pulse Essentials subscription is active. Here is what happens next:\n\n1. I will send your first drift memo by 2026-05-19. It runs across the\n   five operating pillars using only verbatim public reviews and records.\n2. After that, memos land on a monthly schedule. You can cancel any\n   time from the link in every email.\n3. If you want to change the target location, add a location, or adjust the\n   focus, reply to any memo and I will handle it.\n\nNo sales calls. No dashboard logins. No auto-posting on your behalf. Every\nresponse draft is yours to approve before anything goes out.\n\nSheet of record for your subscription:\nclient_id client_641e0a12\n\nTalk soon,\nRyan\nJetPakt Solutions\n6222 E Pine Lane, Suite 6212, Parker, CO 80138\n",
+      "idempotency_key": "welcome::client_641e0a12::28bdd4db",
+      "client_id": "client_641e0a12"
+    }
+  ],
+  "summary": {
+    "client_id": "client_641e0a12",
+    "prospect_id": "arvada_3_sons_italian",
+    "tier": "Pulse Essentials",
+    "cadence": "monthly",
+    "mrr_usd": 149,
+    "matched_prospect": true,
+    "next_deliverable_due": "2026-05-19T09:00:00+00:00"
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "generated_at": "2026-04-19T14:05:22+00:00",
+  "clients_append": [
+    {
+      "row_object": {
+        "client_id": "client_20009446",
+        "prospect_id": "direct_nevertheheardofthem_com_never_heard_of_them_llc",
+        "business_name": "Never Heard of Them LLC",
+        "contact_email": "owner@nevertheheardofthem.com",
+        "stripe_customer_id": "cus_TEST_direct_scan",
+        "stripe_subscription_id": "",
+        "tier": "Scan",
+        "cadence": "one_time",
+        "mrr_usd": "0",
+        "status": "Scan",
+        "onboarded_at": "2026-04-19T14:05:22+00:00",
+        "next_deliverable_due": "2026-04-21T09:00:00+00:00",
+        "last_memo_sent_at": "",
+        "last_memo_file": "",
+        "cancellation_reason": "",
+        "notes": "Onboarded 2026-04-19T14:05:22+00:00. Product=prod_UMDaHMYdnHdW2H.",
+        "created_at": "2026-04-19T14:05:22+00:00",
+        "updated_at": "2026-04-19T14:05:22+00:00"
+      },
+      "positional_row": [
+        "client_20009446",
+        "direct_nevertheheardofthem_com_never_heard_of_them_llc",
+        "Never Heard of Them LLC",
+        "owner@nevertheheardofthem.com",
+        "cus_TEST_direct_scan",
+        "",
+        "Scan",
+        "one_time",
+        "0",
+        "Scan",
+        "2026-04-19T14:05:22+00:00",
+        "2026-04-21T09:00:00+00:00",
+        "",
+        "",
+        "",
+        "Onboarded 2026-04-19T14:05:22+00:00. Product=prod_UMDaHMYdnHdW2H.",
+        "2026-04-19T14:05:22+00:00",
+        "2026-04-19T14:05:22+00:00"
+      ]
+    }
+  ],
+  "prospect_updates": [],
+  "outlook_drafts": [
+    {
+      "action": "draft_email",
+      "to": [
+        "owner@nevertheheardofthem.com"
+      ],
+      "cc": [],
+      "bcc": [],
+      "subject": "Scan — first memo by 2026-04-21",
+      "body": "Welcome to JetPakt.\n\nYour Scan subscription is active. Here is what happens next:\n\n1. I will send your first drift memo by 2026-04-21. It runs across the\n   five operating pillars using only verbatim public reviews and records.\n2. After that, memos land on a one-time schedule. You can cancel any\n   time from the link in every email.\n3. If you want to change the target location, add a location, or adjust the\n   focus, reply to any memo and I will handle it.\n\nNo sales calls. No dashboard logins. No auto-posting on your behalf. Every\nresponse draft is yours to approve before anything goes out.\n\nSheet of record for your subscription:\nclient_id client_20009446\n\nTalk soon,\nRyan\nJetPakt Solutions\n6222 E Pine Lane, Suite 6212, Parker, CO 80138\n",
+      "idempotency_key": "welcome::client_20009446::03715622",
+      "client_id": "client_20009446"
+    }
+  ],
+  "summary": {
+    "client_id": "client_20009446",
+    "prospect_id": "direct_nevertheheardofthem_com_never_heard_of_them_llc",
+    "tier": "Scan",
+    "cadence": "one_time",
+    "mrr_usd": 0,
+    "matched_prospect": false,
+    "next_deliverable_due": "2026-04-21T09:00:00+00:00"
+  }
+}

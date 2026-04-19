@@ -33,6 +33,10 @@ from .inbox import (
     Prospect, Hit, build_query_plan, classify_hit,
     build_apply_plan, load_prospects_from_json, prospects_by_domain,
 )
+from .clients import (
+    load_stripe_customer, load_stripe_subscription, load_prospects,
+    build_onboarding_plan,
+)
 
 
 def _run_py(script: Path, *args: str) -> int:
@@ -336,6 +340,50 @@ def cmd_inbox_apply(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_onboard(args: argparse.Namespace) -> int:
+    """Build an onboarding plan from a Stripe customer + subscription JSON.
+
+    Emits onboarding_plan.json with clients_append, prospect_updates, and a
+    welcome email draft. The agent applies via google_sheets + outlook.
+    """
+    customer_path = Path(args.customer)
+    if not customer_path.is_absolute():
+        customer_path = cfg.REPO_ROOT / customer_path
+    prospects_path = Path(args.prospects)
+    if not prospects_path.is_absolute():
+        prospects_path = cfg.REPO_ROOT / prospects_path
+    sub_path = None
+    if args.subscription:
+        sub_path = Path(args.subscription)
+        if not sub_path.is_absolute():
+            sub_path = cfg.REPO_ROOT / sub_path
+
+    for p in (customer_path, prospects_path):
+        if not p.exists():
+            print(f"ERROR: missing file: {p}")
+            return 2
+
+    customer = load_stripe_customer(customer_path)
+    subscription = load_stripe_subscription(sub_path)
+    prospects = load_prospects(prospects_path)
+
+    plan = build_onboarding_plan(customer, subscription, prospects)
+
+    out_path = Path(args.out) if args.out else (customer_path.parent / "onboarding_plan.json")
+    if not out_path.is_absolute():
+        out_path = cfg.REPO_ROOT / out_path
+    out_path.write_text(json.dumps(plan, indent=2, ensure_ascii=False), encoding="utf-8")
+    s = plan["summary"]
+    print(f"Onboarded: client_id={s['client_id']} prospect_id={s['prospect_id']}")
+    print(f"  tier={s['tier']} cadence={s['cadence']} mrr=${s['mrr_usd']}")
+    print(f"  matched_prospect={s['matched_prospect']} next_due={s['next_deliverable_due']}")
+    print(f"  Clients append: 1")
+    print(f"  Prospect updates: {len(plan['prospect_updates'])}")
+    print(f"  Outlook drafts: {len(plan['outlook_drafts'])}")
+    print(f"  {out_path}")
+    return 0
+
+
 def cmd_status(_args: argparse.Namespace) -> int:
     # Minimal status: count drafts by wave directory.
     root = cfg.DRAFTS_DIR
@@ -442,6 +490,14 @@ def main() -> int:
                      help="Path to JSON list of normalized Outlook hits")
     iba.add_argument("--out", default="")
     iba.set_defaults(func=cmd_inbox_apply)
+
+    ob = sub.add_parser("onboard", help="Onboard a Stripe customer into a Clients row + welcome draft")
+    ob.add_argument("--customer", required=True, help="Path to stripe_customer.json")
+    ob.add_argument("--subscription", default="",
+                    help="Path to stripe_subscription.json (omit for Scan one-time)")
+    ob.add_argument("--prospects", required=True, help="Path to prospects.json")
+    ob.add_argument("--out", default="")
+    ob.set_defaults(func=cmd_onboard)
 
     full = sub.add_parser("full")
     full.add_argument("--source", default="")

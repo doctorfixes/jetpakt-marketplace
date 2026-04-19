@@ -110,8 +110,8 @@ Scan features list becomes:
 
 - **Essentials — $149/mo.** Monthly Drift Monitor. Rating, review-count, pillar-rollup diff. New legal-flag alerts.
 - **Pro — $399/mo.** Weekly Drift Monitor. Peer-gap tracking. Pillar-mix diff with rank changes. Same-day alerts on HIGH events.
-- **Alert — $899/mo.** Everything in Pro. Crisis-alert pathway. Response war-room drafts. Attorney-routing gate.
-- **Concierge — $1,499/mo.** Everything in Alert. SMS to the owner on HIGH events. Monthly strategy review on the pillar roadmap.
+- **Alert — $899/mo.** HIDDEN on site until Phase 3 monitor ships. Promised: everything in Pro, crisis-alert pathway, response war-room drafts, attorney-routing gate.
+- **Concierge — $1,499/mo.** Everything in Pro. Direct-line response drafting within 4 business hours of a HIGH event the owner flags. Monthly strategy review on the pillar roadmap. (Was: SMS to owner on HIGH events + Everything in Alert; revised 2026-04-19 while Alert tier is hidden.)
 
 ### 2.7 FAQ — delta vs current
 

@@ -1,0 +1,9 @@
+{
+  "id": "sub_TEST_essentials_01",
+  "customer_id": "cus_TEST_pulse_essentials",
+  "product_id": "prod_UMDbLrW0doOHPI",
+  "price_id": "price_1TNVAPEa6thiGvoJjjyZQvGz",
+  "status": "active",
+  "current_period_start": "2026-04-19T00:00:00Z",
+  "current_period_end":   "2026-05-19T00:00:00Z"
+}

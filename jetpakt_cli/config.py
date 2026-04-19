@@ -26,6 +26,27 @@ WORKSHEET_IDS = {
     "Metrics": 1953076964,
     "Pipeline": 1925316065,
     "Suppression": 1712783155,
+    "Clients": 534094040,
+}
+
+# --- Clients tab schema (18 cols A..R) --------------------------------------
+CLIENTS_COLUMNS = (
+    "client_id", "prospect_id", "business_name", "contact_email",
+    "stripe_customer_id", "stripe_subscription_id", "tier", "cadence",
+    "mrr_usd", "status", "onboarded_at", "next_deliverable_due",
+    "last_memo_sent_at", "last_memo_file", "cancellation_reason", "notes",
+    "created_at", "updated_at",
+)
+
+# --- Stripe product catalog -> JetPakt tier -------------------------------
+# Maps Stripe product_id to (tier_label, cadence_days, mrr_usd).
+# cadence_days = memo delivery cadence (None = one-time).
+STRIPE_PRODUCT_TIER = {
+    "prod_UMDaHMYdnHdW2H": ("Scan",              None, 0),    # $49 one-time
+    "prod_UMDbLrW0doOHPI": ("Pulse Essentials",   30,  149),
+    "prod_UMDcmqaEyH1UBd": ("Pulse Pro",           7,  399),
+    "prod_UMDdOzoVVKTCZj": ("Pulse Alert",         7,  899),
+    "prod_UMDebs2GG5zR4B": ("Pulse Concierge",     7, 1499),
 }
 
 # --- Inbox-scan defaults ----------------------------------------------------
