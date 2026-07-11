@@ -251,12 +251,12 @@ Net effect: one repo, two businesses, shared mechanism where it made sense (CRM/
 
 ---
 
-## 11. Open Questions to Decide Before Day 1
+## 11. Open Questions — Defaults Applied
 
-1. ~~**Brand name**~~ — **Decided: JetPakt AI.** Same brand as the restaurant business, distinguished as a separate product line.
-2. ~~**Domain**~~ — **Decided: gojetpakt.com** (the existing domain, same as the restaurant business's marketing site — reused, not a new purchase).
-3. **Legal entity:** existing LLC to invoice through, or set up a new one for liability separation from JetPakt Pulse?
-4. **Cell number for owner escalations:** yours during the pilot, or set up a shared on-call number from day one?
-5. **Free-pilot design partner:** do you already have one warm business owner in the 80134 area who'd say yes to a free install for a testimonial? If yes, name them — it changes the day-7 timeline.
+Ryan doesn't have a firm answer on the legal-entity or design-partner questions yet. Rather than block on them, each gets a default below so the plan stays actionable; revisit whenever there's a real answer.
 
-Three of five are resolved. Answer the remaining two and days 1–7 becomes concrete tickets, not a plan.
+1. ~~**Brand name**~~ — **Decided: JetPakt AI.**
+2. ~~**Domain**~~ — **Decided: gojetpakt.com** (reused, not a new purchase).
+3. **Legal entity — default: invoice through the existing LLC, revisit at scale.** Lower friction, no new filing/EIN/bank account needed to start. Two things to do regardless of which entity: (a) get an E&O / cyber-liability rider added to whatever policy already covers JetPakt Pulse — this business touches call transcripts (PII) and answers a client's phone line, a different risk profile than a Sheets-based reporting product; (b) revisit a separate LLC if the agency clears roughly $10–15k MRR or if a specific liability scenario worries you (e.g., a missed emergency call). This isn't legal advice — loop in an accountant/lawyer before the first real contract goes out, but it shouldn't hold up building or piloting.
+4. **Cell number for owner escalations — default: your own cell during the pilot.** Zero setup cost, and you want to hear the actual escalation calls while you're still tuning the AI agent's script. Move to a shared on-call number (Google Voice or a second Twilio line forwarded to you) once you're past ~10 accounts or want a night off.
+5. **Free-pilot design partner — default: no pre-identified partner required.** Fold "find one" into the Days 8–21 outreach wave instead of a prerequisite: run the normal Prospects sourcing + cold-touch cadence, and offer the free-pilot deal to the first A-priority responder who seems like a good testimonial fit (established, well-reviewed, comfortable being recorded). Also worth a low-cost parallel path: ask around your own network / the Parker Chamber / Nextdoor before waiting on cold outreach to produce one — a warm intro converts faster than a cold pilot offer.
