@@ -1,6 +1,8 @@
-"""JetPakt — Bookkeeping Marketplace API
+"""JetPakt AI — AI Front Desk for 80134-area local service businesses
 
-Post → Bid → Escrow → Execute → Verify → Settle
+24/7 AI phone answering, booking, one-page sites, and review automation for
+salons, dry cleaners, roofers, plumbers, and other trades that don't have
+automated front-office tooling today. See docs/AI_AGENCY_PLAN.md.
 """
 
 import os
@@ -9,11 +11,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from api.routes.marketplace import router as marketplace_router
+from api.routes.services import router as services_router
+from api.routes.webhooks import router as webhooks_router
 
 app = FastAPI(
-    title="JetPakt Marketplace",
-    description="Automated bookkeeping marketplace with arithmetic verification",
+    title="JetPakt AI",
+    description="AI Front Desk automation for local service businesses",
     version="0.1.0",
 )
 
@@ -30,8 +33,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Marketplace API routes
-app.include_router(marketplace_router)
+app.include_router(services_router)
+app.include_router(webhooks_router)
+
+
+@app.get("/api/health")
+async def health():
+    return {"status": "ok", "service": "jetpakt-ai"}
+
 
 # Serve static marketing site
 site_dir = os.path.join(os.path.dirname(__file__), "site")

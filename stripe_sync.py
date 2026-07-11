@@ -46,6 +46,7 @@ CANONICAL_PRODUCTS: list[dict[str, Any]] = [
         "recurring": None,  # one-time
         "cadence_label": "one-time",
         "tier": 1,
+        "vertical": "restaurant",
     },
     {
         "lookup_key": "jetpakt_pulse_essentials_v1",
@@ -54,6 +55,7 @@ CANONICAL_PRODUCTS: list[dict[str, Any]] = [
         "recurring": "month",
         "cadence_label": "monthly digest",
         "tier": 2,
+        "vertical": "restaurant",
     },
     {
         "lookup_key": "jetpakt_pulse_pro_v1",
@@ -62,6 +64,7 @@ CANONICAL_PRODUCTS: list[dict[str, Any]] = [
         "recurring": "month",
         "cadence_label": "weekly digest",
         "tier": 3,
+        "vertical": "restaurant",
     },
     {
         "lookup_key": "jetpakt_pulse_alert_v1",
@@ -70,6 +73,7 @@ CANONICAL_PRODUCTS: list[dict[str, Any]] = [
         "recurring": "month",
         "cadence_label": "weekly + on-alert",
         "tier": 4,
+        "vertical": "restaurant",
     },
     {
         "lookup_key": "jetpakt_pulse_concierge_v1",
@@ -78,6 +82,70 @@ CANONICAL_PRODUCTS: list[dict[str, Any]] = [
         "recurring": "month",
         "cadence_label": "weekly + alert + post-visit SMS",
         "tier": 5,
+        "vertical": "restaurant",
+    },
+]
+
+# AI Agency vertical (80134-area local service businesses: salons, dry
+# cleaners, roofers, plumbers, trades). Each service is a setup/monthly pair
+# except Review Autopilot (monthly add-on only). None of these lookup_keys
+# exist in Stripe yet — same rule as the restaurant catalog: Ryan creates the
+# matching products/prices by hand in the Dashboard (billing writes require a
+# human step), then `--refresh` picks them up. See docs/AGENCY_CRM_SETUP.md.
+AGENCY_PRODUCTS: list[dict[str, Any]] = [
+    {
+        "lookup_key": "jetpakt_agency_front_desk_setup_v1",
+        "service_code": "front_desk", "kind": "setup",
+        "name": "AI Front Desk — Setup",
+        "unit_amount_usd": 997, "recurring": None, "vertical": "agency",
+    },
+    {
+        "lookup_key": "jetpakt_agency_front_desk_monthly_v1",
+        "service_code": "front_desk", "kind": "monthly",
+        "name": "AI Front Desk — Monthly",
+        "unit_amount_usd": 397, "recurring": "month", "vertical": "agency",
+    },
+    {
+        "lookup_key": "jetpakt_agency_site_gbp_setup_v1",
+        "service_code": "site_gbp", "kind": "setup",
+        "name": "One-Page Site + GBP — Setup",
+        "unit_amount_usd": 497, "recurring": None, "vertical": "agency",
+    },
+    {
+        "lookup_key": "jetpakt_agency_site_gbp_monthly_v1",
+        "service_code": "site_gbp", "kind": "monthly",
+        "name": "One-Page Site + GBP — Monthly",
+        "unit_amount_usd": 97, "recurring": "month", "vertical": "agency",
+    },
+    {
+        "lookup_key": "jetpakt_agency_review_autopilot_monthly_v1",
+        "service_code": "review_autopilot", "kind": "monthly",
+        "name": "Review Autopilot — Monthly",
+        "unit_amount_usd": 197, "recurring": "month", "vertical": "agency",
+    },
+    {
+        "lookup_key": "jetpakt_agency_lead_intake_setup_v1",
+        "service_code": "lead_intake", "kind": "setup",
+        "name": "Lead Intake & Instant Quote — Setup",
+        "unit_amount_usd": 297, "recurring": None, "vertical": "agency",
+    },
+    {
+        "lookup_key": "jetpakt_agency_lead_intake_monthly_v1",
+        "service_code": "lead_intake", "kind": "monthly",
+        "name": "Lead Intake & Instant Quote — Monthly",
+        "unit_amount_usd": 147, "recurring": "month", "vertical": "agency",
+    },
+    {
+        "lookup_key": "jetpakt_agency_bundle_setup_v1",
+        "service_code": "front_desk_complete", "kind": "setup",
+        "name": "AI Front Desk Complete — Setup",
+        "unit_amount_usd": 1997, "recurring": None, "vertical": "agency",
+    },
+    {
+        "lookup_key": "jetpakt_agency_bundle_monthly_v1",
+        "service_code": "front_desk_complete", "kind": "monthly",
+        "name": "AI Front Desk Complete — Monthly",
+        "unit_amount_usd": 497, "recurring": "month", "vertical": "agency",
     },
 ]
 
@@ -114,7 +182,7 @@ def fetch_prices_from_stripe() -> list[dict[str, Any]]:
 
     Uses the list_prices + list_products tools (read-only).
     """
-    want_keys = {p["lookup_key"] for p in CANONICAL_PRODUCTS}
+    want_keys = {p["lookup_key"] for p in CANONICAL_PRODUCTS + AGENCY_PRODUCTS}
     # list_prices has no lookup_key filter — we list all and filter client-side.
     # For a ~5-product shop this is trivially cheap.
     prices = _call("list_prices", {"limit": 100})
@@ -144,7 +212,8 @@ def refresh_catalog() -> dict[str, Any]:
         }
 
     # Missing keys = products Ryan hasn't created in Dashboard yet.
-    missing = [p["lookup_key"] for p in CANONICAL_PRODUCTS
+    all_products = CANONICAL_PRODUCTS + AGENCY_PRODUCTS
+    missing = [p["lookup_key"] for p in all_products
                if p["lookup_key"] not in by_key]
 
     out = {
@@ -152,6 +221,7 @@ def refresh_catalog() -> dict[str, Any]:
         "by_lookup_key": by_key,
         "missing_lookup_keys": missing,
         "canonical": CANONICAL_PRODUCTS,
+        "agency": AGENCY_PRODUCTS,
     }
     CATALOG_PATH.parent.mkdir(parents=True, exist_ok=True)
     CATALOG_PATH.write_text(json.dumps(out, indent=2))

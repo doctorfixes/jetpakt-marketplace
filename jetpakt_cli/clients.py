@@ -107,10 +107,19 @@ def _client_id(stripe_customer_id: str, product_id: str) -> str:
     return f"client_{h}"
 
 
+def _cadence_label(cadence_days: Optional[int]) -> str:
+    return (
+        "one_time" if cadence_days is None
+        else "weekly" if cadence_days == 7
+        else "monthly"
+    )
+
+
 def _tier_from_subscription(sub: Optional[StripeSubscription]) -> tuple:
     """Return (tier_label, cadence_days, mrr_usd, cadence_label, status)."""
     if sub is None:
-        return ("Scan", None, 0, "one_time", "Scan")
+        label, cadence_days, mrr = cfg.NO_SUBSCRIPTION_TIER
+        return (label, cadence_days, mrr, _cadence_label(cadence_days), label)
     product_id = sub.product_id
     if product_id not in cfg.STRIPE_PRODUCT_TIER:
         raise ValueError(
@@ -118,13 +127,8 @@ def _tier_from_subscription(sub: Optional[StripeSubscription]) -> tuple:
             f"config.STRIPE_PRODUCT_TIER before onboarding."
         )
     label, cadence_days, mrr = cfg.STRIPE_PRODUCT_TIER[product_id]
-    cadence_label = (
-        "one_time" if cadence_days is None
-        else "weekly" if cadence_days == 7
-        else "monthly"
-    )
     status_label = "Trialing" if sub.status == "trialing" else "Active"
-    return (label, cadence_days, mrr, cadence_label, status_label)
+    return (label, cadence_days, mrr, _cadence_label(cadence_days), status_label)
 
 
 def _first_due_iso(cadence_days: Optional[int], now: datetime) -> str:
@@ -200,29 +204,8 @@ def match_prospect(customer_email: str,
 
 
 # --- Welcome email draft ---------------------------------------------------
-
-WELCOME_BODY_TEMPLATE = """Welcome to JetPakt.
-
-Your {tier_name} subscription is active. Here is what happens next:
-
-1. I will send your first drift memo by {first_due_human}. It runs across the
-   five operating pillars using only verbatim public reviews and records.
-2. After that, memos land on a {cadence_human} schedule. You can cancel any
-   time from the link in every email.
-3. If you want to change the target location, add a location, or adjust the
-   focus, reply to any memo and I will handle it.
-
-No sales calls. No dashboard logins. No auto-posting on your behalf. Every
-response draft is yours to approve before anything goes out.
-
-Sheet of record for your subscription:
-client_id {client_id}
-
-Talk soon,
-Ryan
-JetPakt Solutions
-6222 E Pine Lane, Suite 6212, Parker, CO 80138
-"""
+# Template text lives in config.py — it's profile-specific (restaurant vs.
+# agency copy) while this formatting logic stays shared.
 
 
 def build_welcome_draft(row: OnboardingRow, sub_opt: Optional[StripeSubscription]) -> Dict[str, Any]:
@@ -232,14 +215,14 @@ def build_welcome_draft(row: OnboardingRow, sub_opt: Optional[StripeSubscription
         "monthly": "monthly",
     }[row.cadence]
     due_human = row.next_deliverable_due.split("T")[0]
-    body = WELCOME_BODY_TEMPLATE.format(
+    body = cfg.WELCOME_BODY_TEMPLATE.format(
         tier_name=row.tier,
         first_due_human=due_human,
         cadence_human=cadence_human,
         client_id=row.client_id,
     )
     # No em/en-dashes per outreach policy; keep under 45 chars.
-    subject = f"{row.tier} is active, first memo {due_human}"
+    subject = cfg.WELCOME_SUBJECT_TEMPLATE.format(tier_name=row.tier, first_due_human=due_human)
     if len(subject) > 45:
         subject = f"{row.tier} is active"
     # Guard against any stray em/en dashes in future template tweaks.
@@ -281,7 +264,7 @@ def build_onboarding_plan(customer: StripeCustomer,
         business_name = customer.name or customer.email or prospect_id
         prospect_current_stage = ""
 
-    product_id = subscription.product_id if subscription else "prod_UMDaHMYdnHdW2H"
+    product_id = subscription.product_id if subscription else cfg.DEFAULT_ONE_TIME_PRODUCT_ID
     client_id = _client_id(customer.id, product_id)
 
     row = OnboardingRow(

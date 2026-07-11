@@ -27,6 +27,8 @@ Thumbs.db
 .netlify/
 dist/
 build/
+output/
+data/stripe_catalog.json
 
 # JetPakt — docs contain business plans and specs (tracked separately)
 # docs/ is intentionally UN-ignored so it ships with the repo

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JetPakt — Verified Bookkeeping Marketplace</title>
-  <meta name="description" content="Post your month-end close. Bookkeepers compete. Arithmetic verification guarantees accuracy. Pay only when it balances.">
+  <title>JetPakt AI — AI Front Desk for Local Service Businesses</title>
+  <meta name="description" content="24/7 AI phone answering, booking, a real website, and automatic review requests for salons, dry cleaners, roofers, plumbers, and trades in the Parker, CO area — installed in a week, no app to learn.">
   <style>
     :root {
       --blue: #2563eb;
@@ -58,16 +58,17 @@
     }
     .hero h1 { font-size: 3rem; font-weight: 800; color: var(--slate-900); line-height: 1.15; max-width: 800px; margin: 0 auto 20px; }
     .hero h1 span { color: var(--blue); }
-    .hero p { font-size: 1.2rem; color: var(--slate-600); max-width: 600px; margin: 0 auto 36px; }
+    .hero p { font-size: 1.2rem; color: var(--slate-600); max-width: 620px; margin: 0 auto 36px; }
     .hero-cta { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
     .hero-cta .btn { min-width: 180px; }
+    .hero-verticals { margin-top: 28px; color: var(--slate-600); font-size: 0.9rem; }
 
     /* How it works */
     .section { padding: 80px 0; }
     .section-alt { background: white; }
     .section h2 { text-align: center; font-size: 2rem; font-weight: 700; margin-bottom: 50px; }
 
-    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
     .step {
       background: white; border: 1px solid var(--slate-200); border-radius: 12px;
       padding: 32px; transition: box-shadow 0.2s;
@@ -81,11 +82,11 @@
     }
     .step:nth-child(2) .step-num { background: var(--green); }
     .step:nth-child(3) .step-num { background: var(--amber); }
+    .step:nth-child(4) .step-num { background: #a855f7; }
     .step h3 { font-size: 1.2rem; margin-bottom: 8px; }
     .step p { color: var(--slate-600); font-size: 0.95rem; }
-    .step .arrow { margin-top: 16px; color: var(--blue); font-weight: 600; font-size: 0.9rem; }
 
-    /* Verification moat */
+    /* Problem / moat */
     .moat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
     .moat-text h2 { text-align: left; margin-bottom: 20px; }
     .moat-text p { color: var(--slate-600); margin-bottom: 16px; font-size: 1.05rem; }
@@ -97,7 +98,6 @@
       padding: 32px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.9rem; line-height: 1.8;
     }
     .moat-visual .pass { color: var(--green); }
-    .moat-visual .fail { color: #ef4444; }
     .moat-visual .check { color: var(--slate-200); }
     .moat-visual .label { color: var(--slate-600); }
 
@@ -112,9 +112,9 @@
     .card ul li::before { content: "✓"; color: var(--green); font-weight: bold; }
 
     /* Pricing */
-    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
     .pricing-card {
-      background: white; border: 1px solid var(--slate-200); border-radius: 12px; padding: 36px;
+      background: white; border: 1px solid var(--slate-200); border-radius: 12px; padding: 32px 28px;
       text-align: center; transition: box-shadow 0.2s;
     }
     .pricing-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
@@ -123,16 +123,20 @@
       position: relative;
     }
     .pricing-card.featured::before {
-      content: "Most Popular"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+      content: "Best Value"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
       background: var(--blue); color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
     }
-    .pricing-card .price { font-size: 2.5rem; font-weight: 800; color: var(--slate-900); margin: 16px 0; }
-    .pricing-card .price span { font-size: 1rem; color: var(--slate-600); font-weight: 400; }
-    .pricing-card .subtitle { color: var(--slate-600); margin-bottom: 24px; font-size: 0.95rem; }
-    .pricing-card ul { text-align: left; list-style: none; margin-bottom: 28px; }
-    .pricing-card ul li { padding: 6px 0; color: var(--slate-600); font-size: 0.9rem; display: flex; gap: 8px; }
+    .pricing-card .price { font-size: 2.2rem; font-weight: 800; color: var(--slate-900); margin: 12px 0 4px; }
+    .pricing-card .price span { font-size: 0.95rem; color: var(--slate-600); font-weight: 400; }
+    .pricing-card .setup-fee { color: var(--slate-600); font-size: 0.85rem; margin-bottom: 16px; }
+    .pricing-card .subtitle { color: var(--slate-600); margin-bottom: 20px; font-size: 0.9rem; }
+    .pricing-card ul { text-align: left; list-style: none; margin-bottom: 24px; }
+    .pricing-card ul li { padding: 5px 0; color: var(--slate-600); font-size: 0.88rem; display: flex; gap: 8px; }
     .pricing-card ul li::before { content: "✓"; color: var(--green); font-weight: bold; }
     .pricing-card .btn { width: 100%; }
+
+    .guarantee { text-align: center; margin-top: 36px; color: var(--slate-600); font-size: 0.95rem; }
+    .guarantee strong { color: var(--slate-900); }
 
     /* CTA */
     .cta-section {
@@ -156,227 +160,208 @@
 </head>
 <body>
   <nav>
-    <div class="logo">Jet<span>Pakt</span></div>
+    <div class="logo">Jet<span>Pakt</span> AI</div>
     <div class="nav-links">
       <a href="#how-it-works">How It Works</a>
-      <a href="#owners">For Owners</a>
-      <a href="#bookkeepers">For Bookkeepers</a>
+      <a href="#services">Services</a>
       <a href="#pricing">Pricing</a>
       <a href="mailto:gojetpakt.us@outlook.com">Contact</a>
-      <a href="#" class="btn btn-primary">Get Started</a>
+      <a href="#pricing" class="btn btn-primary">Get Started</a>
     </div>
   </nav>
 
   <section class="hero">
     <div class="container">
-      <h1>Post your books. Bookkeepers compete.<br>Arithmetic <span>verifies</span> the result.</h1>
-      <p>The first marketplace where bookkeeping accuracy is guaranteed by automated arithmetic checks — not trust or reputation.</p>
+      <h1>Never miss another call.<br>Your <span>AI front desk</span>, live in a week.</h1>
+      <p>A 24/7 AI phone agent that answers, books, and confirms every call — plus a real website and automatic review requests. Built for local service businesses in the Parker, CO area that don't have any of this today.</p>
       <div class="hero-cta">
-        <a href="#" class="btn btn-primary">I Need a Bookkeeper</a>
-        <a href="#" class="btn btn-outline">I Am a Bookkeeper</a>
+        <a href="#pricing" class="btn btn-primary">See Pricing</a>
+        <a href="#how-it-works" class="btn btn-outline">How It Works</a>
       </div>
+      <p class="hero-verticals">Salons · dry cleaners · roofers · plumbers · HVAC · electricians · groomers · and other trades in 80134 and nearby zips</p>
     </div>
   </section>
 
   <section class="section section-alt" id="how-it-works">
     <div class="container">
-      <h2>How the Marketplace Works</h2>
+      <h2>From First Call to Live in 5 Business Days</h2>
       <div class="steps">
         <div class="step">
           <div class="step-num">1</div>
-          <h3>Post Your Close</h3>
-          <p>Describe your month-end close, upload your chart of accounts and bank statements, and set your budget. Bookkeepers see exactly what's needed.</p>
-          <div class="arrow">Post →</div>
+          <h3>Discovery Call</h3>
+          <p>30 minutes on your current phone situation, booking system, and Google reviews. No pitch, just diagnosis.</p>
         </div>
         <div class="step">
           <div class="step-num">2</div>
-          <h3>Bookkeepers Bid</h3>
-          <p>Vetted bookkeepers review your post and compete on price and turnaround. You pick the best fit — not the algorithm.</p>
-          <div class="arrow">Bid →</div>
+          <h3>Pick a Plan</h3>
+          <p>Choose the AI Front Desk on its own, or the full bundle with a website and review automation included.</p>
         </div>
         <div class="step">
           <div class="step-num">3</div>
-          <h3>Escrow &amp; Execute</h3>
-          <p>Payment goes into Stripe escrow. The bookkeeper reconciles your accounts while you know the funds are safe.</p>
-          <div class="arrow">Escrow → Execute</div>
+          <h3>Install Week</h3>
+          <p>We configure your AI phone number, connect it to your calendar, and (if included) launch your site and Google Business Profile.</p>
         </div>
         <div class="step">
           <div class="step-num">4</div>
-          <h3>Verify &amp; Settle</h3>
-          <p>Our verification engine runs binary arithmetic checks. Debits = credits. Bank statements match. Periods balance. Only then does payment release.</p>
-          <div class="arrow">Verify → Settle</div>
+          <h3>Go Live</h3>
+          <p>Calls get answered, appointments get booked, and you get a weekly summary of what came in — no dashboard required.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section" id="verification">
+  <section class="section" id="problem">
     <div class="container">
       <div class="moat-grid">
         <div class="moat-text">
-          <h2>The Verification Moat</h2>
-          <p>Every transaction is checked by automated arithmetic — <strong>not subjective judgment</strong>. Either the numbers balance or they don't.</p>
-          <p>This is the core innovation: make accuracy the only path to settlement. No reputation system, no star ratings, no he-said-she-said. Just math.</p>
+          <h2>Every Missed Call Is Lost Revenue</h2>
+          <p>You're on a roof, under a sink, or with a client in the chair. The phone rings. It goes to voicemail. That customer calls the next name on the list.</p>
+          <p>Most local service businesses in 80134 don't have a receptionist, an online booking page, or any way to text a customer back automatically. JetPakt AI fixes that without hiring anyone.</p>
           <div class="moat-check">
             <div class="moat-check-icon">✓</div>
-            <p><strong>Debits = Credits</strong> — The fundamental accounting identity. If they don't match, it doesn't settle.</p>
+            <p><strong>Answers every call, 24/7</strong> — nights, weekends, and while you're on a job.</p>
           </div>
           <div class="moat-check">
             <div class="moat-check-icon">✓</div>
-            <p><strong>Bank Statement Match</strong> — Cash balance must match the bank's ending balance within tolerance.</p>
+            <p><strong>Books straight to your calendar</strong> — no back-and-forth texting to find a time.</p>
           </div>
           <div class="moat-check">
             <div class="moat-check-icon">✓</div>
-            <p><strong>Period Carry-Forward</strong> — Retained earnings correctly reflect the period's net change.</p>
-          </div>
-          <div class="moat-check">
-            <div class="moat-check-icon">✓</div>
-            <p><strong>Non-Negative Assets</strong> — Asset accounts cannot go negative. No creative accounting.</p>
+            <p><strong>Escalates real emergencies</strong> — a burst pipe still rings your cell.</p>
           </div>
         </div>
         <div class="moat-visual">
-          <div class="label"># Verification Report — gojetpakt.com/verify/tx_abc123</div>
+          <div class="label"># Incoming call — 7:42 PM, Tuesday</div>
           <br>
-          <div class="check">[PASS] debits_equal_credits</div>
-          <div class="check">  Total debits: $12,450.00</div>
-          <div class="check">  Total credits: $12,450.00</div>
+          <div class="check">[ANSWERED] AI Front Desk</div>
+          <div class="check">  Caller: "Do you do emergency roof repair?"</div>
           <br>
-          <div class="check">[SKIP] bank_statement_match</div>
-          <div class="check">  No bank statement provided</div>
+          <div class="check">[BOOKED] Tomorrow 9:00 AM — inspection</div>
+          <div class="check">  Confirmation text sent</div>
           <br>
-          <div class="check">[PASS] period_balance</div>
-          <div class="check">  Retained earnings: $45,200.00</div>
-          <br>
-          <div class="check">[PASS] non_negative_assets</div>
-          <div class="check">  All asset accounts non-negative</div>
-          <br>
-          <div class="pass">✓ VERIFIED — 4/5 pass, 1 skip, 0 fail</div>
-          <div class="pass">  Ready to settle. Payment releasing.</div>
+          <div class="pass">✓ Call answered in 1 ring. Job booked before you</div>
+          <div class="pass">  even saw the missed-call notification.</div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section section-alt" id="owners">
+  <section class="section section-alt" id="services">
     <div class="container">
-      <h2>For Business Owners</h2>
+      <h2>Pick What You Need</h2>
       <div class="two-col">
         <div class="card">
-          <h3>Post a Close</h3>
+          <h3>AI Front Desk</h3>
           <ul>
-            <li>Describe your month-end close in plain language</li>
-            <li>Upload your chart of accounts and bank statements</li>
-            <li>Set your budget — bookkeepers compete on price</li>
-            <li>Payment held in Stripe escrow until verification passes</li>
-            <li>Get a verification report proving everything balances</li>
+            <li>24/7 AI phone agent answers every call</li>
+            <li>Books straight into your Google Calendar</li>
+            <li>Texts the caller a confirmation automatically</li>
+            <li>Escalates emergencies to your cell</li>
           </ul>
-          <br>
-          <a href="#" class="btn btn-primary">Post Your Close</a>
         </div>
         <div class="card">
-          <h3>Why JetPakt?</h3>
+          <h3>One-Page Site + Google Business</h3>
           <ul>
-            <li>You choose the bookkeeper — we don't auto-assign</li>
-            <li>No lock-in. Post once or use it every month.</li>
-            <li>Arithmetic verification means no trust required</li>
-            <li>Stripe escrow means no payment risk</li>
-            <li>10% platform fee includes verification and escrow</li>
+            <li>A real website with click-to-call and click-to-text</li>
+            <li>Full Google Business Profile claim and optimization</li>
+            <li>Embedded booking, service list, and service area</li>
+            <li>You own the domain — we just host it</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Review Autopilot</h3>
+          <ul>
+            <li>Automatic SMS review request after every completed job</li>
+            <li>Owner-approved wording per service type</li>
+            <li>Weekly summary of new reviews with reply drafts</li>
+            <li>Fully compliant — no gated or incentivized reviews</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Lead Intake &amp; Instant Quote</h3>
+          <ul>
+            <li>Web form and inbound SMS capture every lead</li>
+            <li>Instant quotes for standard jobs, or a fast callback</li>
+            <li>Routes to your cell when a human's needed</li>
+            <li>Nothing falls through the cracks</li>
           </ul>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="section" id="bookkeepers">
+  <section class="section" id="pricing">
     <div class="container">
-      <h2>For Bookkeepers</h2>
-      <div class="two-col">
-        <div class="card">
-          <h3>Earn What You're Worth</h3>
-          <ul>
-            <li>Set your own prices and turnaround times</li>
-            <li>Work when you want — pick the closes that fit</li>
-            <li>Build a verified accuracy score (not just ratings)</li>
-            <li>Higher accuracy = higher-tier jobs</li>
-            <li>Get paid fast once verification passes</li>
-          </ul>
-          <br>
-          <a href="#" class="btn btn-primary">Apply as a Bookkeeper</a>
-        </div>
-        <div class="card">
-          <h3>How Trust Works</h3>
-          <p style="color: var(--slate-600); margin-bottom: 16px;">On JetPakt, your reputation is built on numbers — not opinions.</p>
-          <ul>
-            <li><strong>Accuracy score</strong> — 100% means every job passed verification</li>
-            <li><strong>Tier progression</strong> — Starter → Professional → Senior as you prove accuracy</li>
-            <li><strong>No star-chasing</strong> — No need to beg for reviews. Just do accurate work.</li>
-            <li>Disputes are rare because verification catches errors before settlement</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="section section-alt" id="pricing">
-    <div class="container">
-      <h2>Simple Pricing</h2>
+      <h2>Simple Pricing, No Contract</h2>
       <div class="pricing-grid">
         <div class="pricing-card">
-          <h3>Starter</h3>
-          <div class="price">$150<span>/close</span></div>
-          <div class="subtitle">One-time month-end close</div>
+          <h3>AI Front Desk</h3>
+          <div class="price">$397<span>/mo</span></div>
+          <div class="setup-fee">+ $997 one-time setup</div>
+          <div class="subtitle">24/7 AI phone answering &amp; booking</div>
           <ul>
-            <li>Single period reconciliation</li>
-            <li>Basic verification (3 checks)</li>
-            <li>Standard turnaround (7 days)</li>
-            <li>Email support</li>
+            <li>Up to 500 answered minutes/mo</li>
+            <li>Calendar booking + SMS confirmation</li>
+            <li>Emergency escalation to your cell</li>
           </ul>
-          <a href="#" class="btn btn-outline">Post a Close</a>
-        </div>
-        <div class="pricing-card featured">
-          <h3>Professional</h3>
-          <div class="price">$100<span>/close</span></div>
-          <div class="subtitle">Monthly recurring — billed quarterly</div>
-          <ul>
-            <li>Monthly month-end closes</li>
-            <li>Full verification suite (5 checks)</li>
-            <li>Priority turnaround (3 days)</li>
-            <li>Bank statement matching</li>
-            <li>Dedicated bookkeeper</li>
-          </ul>
-          <a href="#" class="btn btn-primary">Get Started</a>
+          <a href="mailto:gojetpakt.us@outlook.com" class="btn btn-outline">Get Started</a>
         </div>
         <div class="pricing-card">
-          <h3>Enterprise</h3>
-          <div class="price">Custom</div>
-          <div class="subtitle">Multiple entities, complex structures</div>
+          <h3>Site + Google Business</h3>
+          <div class="price">$97<span>/mo</span></div>
+          <div class="setup-fee">+ $497 one-time setup</div>
+          <div class="subtitle">A real website and an optimized listing</div>
           <ul>
-            <li>Multi-entity consolidation</li>
-            <li>Custom verification rules</li>
-            <li>Same-day turnaround</li>
-            <li>API access</li>
-            <li>Dedicated account manager</li>
+            <li>One-page site, you own the domain</li>
+            <li>Full GBP claim and cleanup</li>
+            <li>Monthly edits and GBP posts</li>
           </ul>
-          <a href="mailto:gojetpakt.us@outlook.com" class="btn btn-outline">Contact Us</a>
+          <a href="mailto:gojetpakt.us@outlook.com" class="btn btn-outline">Get Started</a>
+        </div>
+        <div class="pricing-card featured">
+          <h3>AI Front Desk Complete</h3>
+          <div class="price">$497<span>/mo</span></div>
+          <div class="setup-fee">+ $1,997 one-time setup</div>
+          <div class="subtitle">Front Desk + Site/GBP + Review Autopilot</div>
+          <ul>
+            <li>Everything in AI Front Desk</li>
+            <li>Everything in Site + Google Business</li>
+            <li>Automatic review requests included</li>
+            <li>Saves $141/mo vs. buying separately</li>
+          </ul>
+          <a href="mailto:gojetpakt.us@outlook.com" class="btn btn-primary">Get Started</a>
+        </div>
+        <div class="pricing-card">
+          <h3>Lead Intake &amp; Quote</h3>
+          <div class="price">$147<span>/mo</span></div>
+          <div class="setup-fee">+ $297 one-time setup</div>
+          <div class="subtitle">Add-on: web + SMS lead capture</div>
+          <ul>
+            <li>Instant quotes for standard jobs</li>
+            <li>Fast callback routing</li>
+            <li>Works alongside any plan above</li>
+          </ul>
+          <a href="mailto:gojetpakt.us@outlook.com" class="btn btn-outline">Add This</a>
         </div>
       </div>
+      <p class="guarantee"><strong>30-day money-back guarantee</strong> on AI Front Desk Complete — if it's not answering calls the way we said, you don't pay.</p>
     </div>
   </section>
 
   <section class="cta-section">
     <div class="container">
-      <h2>Ready to reconcile?</h2>
-      <p>Post your first close. Bookkeepers will start bidding within hours. Payment only releases when the numbers balance.</p>
+      <h2>Ready to stop missing calls?</h2>
+      <p>Book a 30-minute discovery call. We'll tell you exactly what you're losing to missed calls today, and what install week looks like for your business.</p>
       <div class="hero-cta">
-        <a href="#" class="btn btn-primary">Post a Close</a>
-        <a href="#" class="btn btn-outline">Learn How It Works</a>
+        <a href="mailto:gojetpakt.us@outlook.com" class="btn btn-primary">Book a Discovery Call</a>
+        <a href="#services" class="btn btn-outline">See What's Included</a>
       </div>
     </div>
   </section>
 
   <footer>
     <div class="container">
-      <p>© 2026 JetPakt.  gojetpakt.com.  Built on Stripe escrow + arithmetic verification.</p>
+      <p>© 2026 JetPakt AI. gojetpakt.com. Serving 80134, 80138 and the surrounding Denver south metro.</p>
     </div>
   </footer>
 </body>

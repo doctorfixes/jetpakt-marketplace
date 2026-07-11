@@ -1,43 +1,37 @@
-# JetPakt — Arithmetic-Verified Bookkeeping Marketplace
+# JetPakt AI — AI Front Desk for Local Service Businesses
 
-Post → Bid → Escrow → Execute → Verify → Settle
-
-**JetPakt is the first marketplace where bookkeeping accuracy is guaranteed by automated arithmetic checks.** Business owners post their month-end closes, vetted bookkeepers compete on price and turnaround, and no payment is released until our verification engine confirms every number balances.
+24/7 AI phone answering, booking, a real website, and automatic review requests for salons, dry cleaners, roofers, plumbers, and other trades that don't have any of this today. Built and operated by Ryan out of Parker, CO, targeting 80134 and the surrounding south-metro Denver zips.
 
 [gojetpakt.com](https://gojetpakt.com) — built by [doctorfixes](https://github.com/doctorfixes)
 
+See [docs/AI_AGENCY_PLAN.md](docs/AI_AGENCY_PLAN.md) for the full business plan (target list, sales process, pricing, milestones, legal landmines).
+
 ---
 
-## The Lifecycle
+## What This Repo Runs
 
-| Phase | What Happens |
-|-------|--------------|
-| **Post** | Owner submits the month-end close: period, deadline, budget, chart of accounts, bank statements |
-| **Bid** | Bookkeepers review and compete on price + turnaround |
-| **Escrow** | Payment held via Stripe. Bookkeeper starts work. |
-| **Execute** | Bookkeeper reconciles accounts |
-| **Verify** | Automated checks: debits = credits, bank matches, periods balance, assets non-negative |
-| **Settle** | If all checks pass → payment released, scores updated. If any fail → dispute. |
+JetPakt runs more than one business line on the same underlying tooling:
 
-## The Moat: Arithmetic Verification
+- **JetPakt AI** (this pivot) — the AI Front Desk agency for local trades/service businesses. New, no live Stripe products yet.
+- **JetPakt Pulse** — an existing, separate restaurant-reputation business (Denver metro). Its Google Sheet and Stripe products are live; nothing about it changed as part of this pivot.
 
-Every check is binary. No subjective judgments. No star ratings needed.
+Both share the same CRM/outreach mechanism (`jetpakt_cli/`) via a **profile switch** — see below.
 
-- **Debits = Credits** — The fundamental accounting identity. Hard constraint.
-- **Bank Statement Match** — Cash balance must match the bank's statement.
-- **Period Balance** — Retained earnings correctly carry forward.
-- **Zero Net Balance** — All accounts net to zero in double-entry.
-- **Non-Negative Assets** — Asset accounts cannot go negative.
+## Service Catalog
 
-If any ERROR-level check fails, the transaction enters dispute. Payment stays in escrow.
+| Service | Setup | Monthly |
+|---|---|---|
+| AI Front Desk (24/7 phone answering + booking) | $997 | $397 |
+| One-Page Site + Google Business Profile | $497 | $97 |
+| Review Autopilot | — | $197 |
+| Lead Intake & Instant Quote | $297 | $147 |
+| **AI Front Desk Complete** (bundle) | **$1,997** | **$497** |
+
+Source of truth for pricing: `stripe_sync.AGENCY_PRODUCTS` in `stripe_sync.py`, served live at `GET /api/services`.
 
 ## Quick Start
 
 ```bash
-# Clone
-git clone https://github.com/doctorfixes/JetPakt-Engine.git
-cd JetPakt-Engine
-
 # Install
 python -m venv venv
 source venv/bin/activate
@@ -47,94 +41,79 @@ pip install -r requirements.txt
 uvicorn main:app --reload
 
 # Visit
-#   API:     http://localhost:8000/api/health
-#   Docs:    http://localhost:8000/docs
-#   Site:    http://localhost:8000/
+#   API:      http://localhost:8000/api/health
+#   Services: http://localhost:8000/api/services
+#   Docs:     http://localhost:8000/docs
+#   Site:     http://localhost:8000/
 ```
 
 ## Project Structure
 
 ```
-marketplace/         # Core marketplace logic
-├── __init__.py
-├── models.py        # Data models (Post, Bid, Transaction, etc.)
-├── state_machine.py # Lifecycle state machine (enforces valid transitions)
-├── post.py          # Post phase
-├── bid.py           # Bid phase
-└── escrow.py        # Escrow → Execute → Verify → Settle orchestration
+main.py               # FastAPI entrypoint — services catalog, webhooks, static site
 
-verification/        # Arithmetic verification engine (the moat)
-├── __init__.py
-└── engine.py        # Checks, report generation, ledger validation
+api/routes/
+├── services.py        # GET /api/services — the AI Agency catalog
+└── webhooks.py         # Stripe / Vapi / Twilio inbound webhooks
 
-api/                 # FastAPI routes
-├── __init__.py
-└── routes/
-    ├── __init__.py
-    └── marketplace.py
+billing/
+└── stripe_client.py   # Verifies + normalizes Stripe webhook events (DEV_MODE without a webhook secret)
 
-stripe/              # Stripe escrow integration
-├── __init__.py
-└── escrow.py        # hold_payment, release_payment, etc.
+stripe_sync.py          # Canonical product catalog (restaurant + agency), read-only Stripe sync
 
-site/                # Marketing site (GoJetPakt)
-└── index.html
+jetpakt_cli/            # CRM + outreach engine — dual-profile (restaurant | agency), see below
+├── config.py            # JETPAKT_PROFILE switch: Sheet ID, Stripe tiers, welcome copy per profile
+├── clients.py            # Stripe customer/subscription -> Clients-tab onboarding plan
+├── enrich.py             # Places-rating + Hunter-email enrichment plans
+├── inbox.py               # Reply/bounce classification for the cold-outreach inbox scan
+├── smoke.py                # Hard gates every outreach draft must pass before sending
+├── sync.py                  # Draft -> Outreach Log row + Sheet sync plan
+├── outlook.py                 # Draft -> Outlook draft_email plan
+└── cli.py                      # `./jetpakt <command>` — see jetpakt_cli/README.md
 
-main.py              # FastAPI entrypoint
-netlify.toml         # Netlify deploy config
+site/
+└── index.html            # Marketing site (gojetpakt.com)
+
+docs/
+├── AI_AGENCY_PLAN.md      # Full business plan for the AI Agency pivot
+└── ...                     # Restaurant-business docs (ROS_FRAMEWORK, PRICING_MODEL, etc.) — unchanged
 ```
+
+## The CRM/Outreach Engine Is Shared, Not Duplicated
+
+`jetpakt_cli/` already implements a working cold-outreach → CRM → onboarding pipeline for the restaurant business (Google Sheets: Prospects / Outreach Log / Suppression / Clients tabs, Outlook drafting, Stripe-triggered onboarding, smoke-gated compliance checks). Rather than build a second CRM from scratch for the AI Agency, that engine got a **profile switch**:
+
+```bash
+./jetpakt <command>                          # restaurant Pulse (default — unchanged behavior)
+JETPAKT_PROFILE=agency ./jetpakt <command>    # AI Agency (80134 trades/local-service)
+```
+
+The restaurant profile's Sheet ID and Stripe product IDs are real and live — nothing about them changed. The agency profile's Sheet/Stripe fields are empty placeholders until you create them (same "billing/CRM writes require a human step" rule `stripe_sync.py` already follows for the restaurant business — see `docs/AI_AGENCY_PLAN.md` §5 for the Sheet tab schema to create).
 
 ## API Endpoints
 
-### Posts
-- `POST /api/posts` — Create a month-end close post
-- `GET /api/posts` — List posts (optional `?status=`)
-- `GET /api/posts/{id}` — Get post details
-- `DELETE /api/posts/{id}` — Delete a post
+- `GET /api/health` — health check
+- `GET /api/services` — the AI Agency service catalog (setup + monthly pricing per service)
+- `GET /api/services/{code}` — single service detail
+- `POST /api/webhooks/stripe` — subscription created/updated + checkout completed → writes an onboarding plan JSON (via `jetpakt_cli.clients.build_onboarding_plan`) for review/apply, same pattern the CLI uses everywhere else
+- `POST /api/webhooks/vapi` — AI phone call events → call log JSON
+- `POST /api/webhooks/twilio` — SMS status/inbound → SMS log JSON
 
-### Bids
-- `POST /api/posts/{id}/bids` — Place a bid
-- `GET /api/posts/{id}/bids` — List bids on a post
-- `POST /api/bids/{id}/accept` — Accept a bid (owner)
-- `POST /api/bids/{id}/withdraw` — Withdraw a bid (bookkeeper)
-
-### Transactions (Escrow → Execute → Verify → Settle)
-- `POST /api/transactions` — Create transaction (move to escrow)
-- `GET /api/transactions` — List transactions
-- `GET /api/transactions/{id}` — Get transaction details
-- `POST /api/transactions/{id}/execute` — Start execution
-- `POST /api/transactions/{id}/verify-submit` — Submit for verification
-- `POST /api/transactions/{id}/verify-result` — Record verification result
-- `POST /api/transactions/{id}/settle` — Release payment
-- `POST /api/transactions/{id}/dispute` — Flag dispute
-- `POST /api/transactions/{id}/cancel` — Cancel transaction
-
-### Accounts
-- `POST /api/bookkeepers` — Register a bookkeeper
-- `GET /api/bookkeepers` — List bookkeepers
-- `POST /api/owners` — Register a business owner
-- `GET /api/owners` — List owners
-
-### Verification
-- `POST /api/verify/submit` — Submit ledger for automated verification
+None of the webhook handlers write to Sheets, Outlook, Twilio, or Vapi directly — they normalize and drop a JSON artifact under `output/` for a human (or the agent, via connectors) to review and apply. Same rule as the rest of the codebase: no automated sends.
 
 ## Development
 
 ```bash
-# Install deps
-pip install fastapi uvicorn stripe
-
-# Run with hot-reload
-uvicorn main:app --reload
-
-# View API docs at http://localhost:8000/docs
+pip install -r requirements.txt
+uvicorn main:app --reload      # http://localhost:8000/docs
+pytest tests/ -v                # backend + CRM-profile regression tests
 ```
 
 ## Deployment
 
 - **Marketing site**: Deploys to Netlify from `site/` → gojetpakt.com
 - **API backend**: FastAPI app, deployable as Netlify Functions or standalone service
-- **Stripe**: Set `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` env vars for production
+- **Stripe**: Set `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` env vars for production; without them the backend runs in DEV_MODE (webhook signature checks skipped, no live Stripe calls)
 
 ## License
 

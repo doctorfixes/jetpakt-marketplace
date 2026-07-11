@@ -1,14 +1,16 @@
 # AI Agency Automation Plan — 80134 Local Small Business
 
-**Version:** 1.0 (planning) · **Owner:** Ryan (rmbrown119@gmail.com) · **Date:** 2026-07-11
+**Version:** 1.1 · **Owner:** Ryan (rmbrown119@gmail.com) · **Date:** 2026-07-11
 
-You are the operator. This document specs the full pivot from JetPakt (bookkeeping marketplace) to a single-operator AI Agency serving local trades and service businesses in and around Parker, CO (80134). Delivery starts in a new repo; JetPakt stays as-is and gets archived once the pivot ships.
+You are the operator. This document specs the pivot to **JetPakt AI**, a single-operator AI Agency serving local trades and service businesses in and around Parker, CO (80134).
+
+**Update from v1.0:** the original plan assumed a from-scratch build in a new repo. It turned out this repo already runs a second, live business — **JetPakt Pulse**, a restaurant-reputation product with a real Google Sheet and real Stripe products, wired to hourly cron automation (`jetpakt_cli/`). That business's config is untouched. JetPakt AI is now built as a **second profile** on the same CRM/outreach engine (`JETPAKT_PROFILE=agency`), in this repo, under the same JetPakt brand — not a separate codebase. See the root README's "What This Repo Runs" section.
 
 ---
 
 ## 1. Positioning
 
-**Name (placeholder):** Front Desk AI · Parker
+**Name:** JetPakt AI
 **One-liner:** We give local service businesses a 24/7 AI receptionist, an instant booking page, and automated review follow-up — installed in a week, no app to learn.
 **Who it's for:** Businesses in 80134 and adjacent zips that (a) miss inbound calls, (b) have no website or a broken one, (c) don't run any SMS/email follow-up. That is most of the target list.
 
@@ -33,7 +35,7 @@ Four productized offerings. Every business gets #1 as the anchor; the rest attac
 - **Setup:** $997 one-time · **Monthly:** $397 (includes up to 500 answered minutes)
 
 ### S2 — One-Page Site + Google Business Profile
-- Single Next.js page on the agency's shared Vercel account (client owns the domain)
+- Single static page templated per client (client owns the domain)
 - Services, hours, service area, click-to-call, click-to-text, embedded booking
 - Full GBP claim, category cleanup, photo upload, service list, Q&A seeding
 - **Setup:** $497 one-time · **Monthly:** $97 (hosting + monthly GBP posts + edits)
@@ -42,7 +44,7 @@ Four productized offerings. Every business gets #1 as the anchor; the rest attac
 - Post-job SMS asks for a Google review with a deep link
 - Owner-approved templates per service (salon vs. plumber wording differs)
 - Weekly summary of new reviews + one-tap owner reply drafts
-- **Add-on to any bundle:** $147/mo · **Standalone:** $197/mo
+- **$197/mo, no setup fee** (as implemented — see `stripe_sync.AGENCY_PRODUCTS`). A bundle-attach discount can be layered on later as a Stripe coupon rather than a second canonical price.
 
 ### S4 — Lead Intake & Instant Quote
 - Web form + inbound SMS keyword captures leads
@@ -76,98 +78,73 @@ Sourcing (all free): Google Maps scrape via Places API (free tier: 200 requests/
 
 ---
 
-## 4. Tech Stack (new repo)
+## 4. Tech Stack
 
-**Repo name:** `frontdesk-ai` (in a new GitHub repo — JetPakt stays put)
+**Repo:** this repo (`jetpakt-marketplace`), same FastAPI backend the restaurant business already runs on — not a new repo. The table below reflects what's actually built vs. still to do.
 
-| Layer | Choice | Why |
+| Layer | Choice | Status |
 |---|---|---|
-| Marketing site | Next.js 15 + Tailwind on Vercel | Free tier fits, per-client sites deploy as subprojects |
-| Backend API | Next.js Route Handlers + one small FastAPI service on Render (webhooks, cron) | Free hobby tier on both; Python is fine here since you already have FastAPI experience from JetPakt |
-| AI voice | **Vapi** (primary) with Retell fallback | $0.05–0.07/min all-in, GPT-4o-mini or Claude Haiku, sub-second latency, Twilio numbers built in |
-| SMS | Twilio (needs A2P 10DLC registration — start now, takes 2–3 weeks) | Standard for US business SMS; ~$0.008/msg |
-| Booking | **Cal.com** self-hosted (free) or Google Calendar direct via API | Cal.com if client wants a nice public page; Calendar API if they just want writes |
-| Website generation | Templated Next.js `[slug]` page pulling from Sheets/Airtable | One template, per-client data row, deploy on push |
-| CRM | **Google Sheets + Apps Script** (see §5) | Zero cost, you and any VA can read it, wires to backend via webhooks |
-| Payments | Stripe (subscription + one-time setup fee product) | You already have Stripe integrated in JetPakt — port the client + webhook handler |
-| Reviews | GBP deep link via SMS; GBP API for reads only (write access is restricted) | Google won't let 3rd parties post reviews on behalf of customers, so SMS-with-link is the only compliant path |
-| Client portal | Same Next.js app, `/client/[slug]` route with magic-link auth | Owners see call transcripts, upcoming bookings, review status |
-| Observability | Vercel logs + Axiom free tier | Enough for first 100 accounts |
+| Marketing site | Static HTML on the existing FastAPI static mount (`site/index.html`) → Netlify | **Built** — see `site/index.html` |
+| Backend API | FastAPI (`main.py`, `api/routes/`) | **Built** — `/api/services`, `/api/webhooks/{stripe,vapi,twilio}` |
+| CRM / outreach engine | `jetpakt_cli/` retargeted via `JETPAKT_PROFILE=agency` (see §5) | **Built** (mechanism) — Sheet/Stripe IDs still placeholders, human step required |
+| Payments (catalog + webhook) | `stripe_sync.AGENCY_PRODUCTS` (canonical catalog) + `billing/stripe_client.py` (webhook verify/normalize) → feeds `jetpakt_cli.clients.build_onboarding_plan` | **Built** — no live Stripe products yet, see §8 |
+| AI voice | **Vapi** (primary) with Retell fallback | **Not started** — needs a real Vapi account; webhook receiver exists (`/api/webhooks/vapi`) and is ready to log call events once wired |
+| SMS | Twilio (needs A2P 10DLC registration — start now, takes 2–3 weeks) | **Not started** — webhook receiver exists (`/api/webhooks/twilio`) |
+| Booking | Google Calendar direct via API, or Cal.com if a client wants a public booking page | **Not started** |
+| Website generation (per-client) | Templated static page, one variant per vertical | **Not started** — the marketing site exists, per-client site templating doesn't yet |
+| Reviews | GBP deep link via SMS; GBP API for reads only (write access is restricted) | **Not started** — Google won't let 3rd parties post reviews on a customer's behalf, so SMS-with-link is the only compliant path |
+| Client portal | Deferred | **Not started** — not needed until first paying accounts exist |
+| Observability | `output/{onboarding,calls,sms}/*.json` artifacts on disk for now | **Built** (minimal) — fine through the first ~20 accounts, revisit later |
 
 **Hard "do not build" list (buy or skip, don't roll your own):** voice model, SMS carrier, calendar UI, review posting.
 
 ---
 
-## 5. Free CRM: Google Sheets + Apps Script
+## 5. Free CRM: Retargeted `jetpakt_cli` Engine (not a new build)
 
-One Google Workbook, six tabs. Every row is keyed by `id` (Apps Script `Utilities.getUuid()`). The FastAPI backend reads/writes via a service-account and the Sheets API.
+The original v1.0 of this doc specced a brand-new six-tab Sheets + Apps Script CRM. That's now unnecessary — this repo already runs a working Sheets CRM + cold-outreach engine for the restaurant business (`jetpakt_cli/`), and it's vertical-agnostic under the hood (smoke gates, Sheet sync, Outlook drafting, inbox-scan classification, Stripe-triggered onboarding — none of that logic is restaurant-specific). JetPakt AI uses the same engine as a **second profile**, `JETPAKT_PROFILE=agency`, so there's one codebase and one CLI to maintain across both businesses.
 
-### Tabs and columns
+### What's shared vs. separate
 
-**`leads`** — every business you're targeting, sourced or inbound
-```
-id | source | business_name | vertical | address | zip | phone | website | gbp_url
-| owner_first | owner_last | owner_email | last_touched_at | status
-| next_action | next_action_at | notes
-```
-`status ∈ {new, researched, contacted, replied, meeting_set, proposal_sent, won, lost, do_not_contact}`
+| | Restaurant (Pulse) | AI Agency |
+|---|---|---|
+| Mechanism (`cli.py`, `smoke.py`, `sync.py`, `outlook.py`, `inbox.py`, `clients.py`) | same code | same code |
+| Google Sheet | live, real ID (untouched) | separate Sheet — **you create this**, see setup below |
+| Stripe products | live, real product IDs (untouched) | separate products — **you create these**, see §8 |
+| Welcome-email copy, Sheet-tab gids, product tiers | `config.py` `"restaurant"` profile | `config.py` `"agency"` profile |
 
-**`accounts`** — leads that converted; one row per paying business
-```
-id | lead_id | business_name | vertical | address | zip | primary_phone
-| forwarded_number | stripe_customer_id | plan | mrr | setup_paid_at
-| activated_at | health_score | csm_notes
-```
+### Sheet tabs to create (mirrors the restaurant Sheet's structure)
 
-**`services`** — which services each account has active
-```
-id | account_id | service_code | started_at | ended_at | monthly_price | status
-```
-`service_code ∈ {front_desk, site_gbp, review_autopilot, lead_intake}`
+Create a new Google Sheet ("JetPakt AI CRM") with four tabs matching the schema `jetpakt_cli` already expects — same columns as the restaurant Sheet, since the mechanism is shared:
 
-**`calls`** — every AI phone interaction (written by Vapi webhook → backend → Sheets)
-```
-id | account_id | started_at | duration_sec | caller_phone | outcome
-| booked_appt_id | escalated | transcript_url | cost_usd
-```
-`outcome ∈ {booked, quoted, callback, spam, escalated, hangup}`
+**`Prospects`** (26 cols, A–Z) — every business you're targeting, sourced or inbound. Full schema: `prospect_id, business_name, category, neighborhood, city, state, rating, review_count, peer_gap, rating_12mo_delta, priority_tier, dominant_pillar, ros_case_id, legal_flag_severity, google_url, yelp_url, website, owner_name, owner_email, source, stage, stage_entered_at, next_action_due, notes, created_at, updated_at`. For the agency, `category` holds the vertical (plumber/salon/roofer/...); `dominant_pillar`/`ros_case_id` are unused restaurant-ops columns — leave blank or repurpose for "which service is the pitch" later if useful.
 
-**`bookings`** — appointments created via the AI
-```
-id | account_id | call_id | customer_name | customer_phone | service | start_at | notes | status
-```
+**`Outreach Log`** (16 cols, A–P): `log_id, prospect_id, direction, channel, touch_type, template_version, subject, body_excerpt, draft_file, pillar, case_id, sent_at, reply_received_at, reply_sentiment, result, created_at`.
 
-**`reviews_out`** — review requests sent
-```
-id | account_id | booking_id | sent_at | responded | left_review | review_url
-```
+**`Suppression`** (6 cols, A–F): `email_or_domain, type, reason, prospect_id, suppressed_at, source`.
 
-### Apps Script automations (all in `Code.gs` in the workbook)
+**`Clients`** (18 cols, A–R): `client_id, prospect_id, business_name, contact_email, stripe_customer_id, stripe_subscription_id, tier, cadence, mrr_usd, status, onboarded_at, next_deliverable_due, last_memo_sent_at, last_memo_file, cancellation_reason, notes, created_at, updated_at`.
 
-1. **Daily 8am pipeline digest** — sum `leads` by status, `accounts` by health, list overdue `next_action_at`; email you a plain-text summary.
-2. **Auto-set `next_action_at`** on status change:
-   - `contacted` → +3 days
-   - `replied` → +1 day
-   - `proposal_sent` → +5 days
-3. **Backend webhook receiver** — a `doPost(e)` endpoint the FastAPI backend hits after each Vapi call or Stripe event; appends to `calls` / updates `accounts`.
-4. **Weekly Sunday churn scan** — accounts where `calls` count in the last 7 days is 0 and status = active → flag for check-in.
-5. **Setup-fee unpaid nag** — accounts where `setup_paid_at` is null and `activated_at` is set → weekly email until paid.
+After creating the Sheet and tabs, get each tab's numeric `gid` (Sheets URL when that tab is active, e.g. `...#gid=123456789`) and fill in `jetpakt_cli/config.py`'s `"agency"` profile: `sheet_id` (or set `JETPAKT_AGENCY_SHEET_ID` env var) and the four `worksheet_ids` entries, currently `None` placeholders.
 
-**Backup:** Apps Script triggers a nightly export of the whole workbook to a Drive folder as `.xlsx`. Keeps 30 rolling copies.
+### Service-delivery data (calls, bookings, reviews sent) — separate from the CRM
+
+The CRM tabs above track the *sales pipeline* (lead → outreach → client). Day-to-day service delivery — AI phone calls, bookings, review sends — is a different concern, handled by the FastAPI webhook receivers (`/api/webhooks/vapi`, `/api/webhooks/twilio`), which currently write JSON artifacts under `output/{calls,sms}/`. Once account volume justifies it, add three more tabs (`Calls`, `Bookings`, `Reviews Sent`) to the same Sheet and have those webhook handlers emit sync plans the same way `jetpakt_cli.sync` does for outreach — not a new system, an extension of this one.
 
 ### Why not Airtable / HubSpot?
 - **Airtable free** caps at 1,000 records/base. First outreach batch alone will fill that.
 - **HubSpot free** has deal pipelines, but its API rate limits and rigid object model fight the "one row is one lead, edit inline in a VA-friendly grid" workflow. Fine to graduate to it at ~$5k MRR.
+- Reusing `jetpakt_cli` avoids the bigger reason to say no to either: it's already built, tested (`tests/test_jetpakt_cli_profiles.py`), and wired to Stripe onboarding.
 
 ---
 
 ## 6. Sales & Delivery Process
 
 ### 6.1 Outreach (weeks 1–ongoing)
-1. **Sourcing:** run a Places API scan of the zip ring for each vertical, filter for `website is null OR website contains 'facebook.com'`, dedupe against `leads`. Target: 500 new rows/week.
+1. **Sourcing:** run a Places API scan of the zip ring for each vertical, filter for `website is null OR website contains 'facebook.com'`, dedupe against the `Prospects` tab. Target: 500 new rows/week.
 2. **First touch:** 15-second personalized voicemail + follow-up SMS ("Saw you don't have a booking page — mind if I send a 60-sec Loom of what I built for a Parker plumber?"). Human-recorded voicemail per vertical, not AI — feels wrong and hurts trust on trades.
 3. **Follow-up cadence:** SMS day 3, email day 7, drop-in visit day 14 for A-priority verticals in the core zip.
-4. **Close artifact:** shared Google Doc proposal (never a PDF — you want them to be able to comment) linking a Loom of a live demo installed on `demo-{vertical}.frontdeskai.local`.
+4. **Close artifact:** shared Google Doc proposal (never a PDF — you want them to be able to comment) linking a Loom of a live demo installed on `demo-{vertical}.gojetpakt.com`.
 
 ### 6.2 Discovery call (30 min)
 - What's your current phone situation? (Answer service? Voicemail? Personal cell?)
@@ -176,12 +153,12 @@ id | account_id | booking_id | sent_at | responded | left_review | review_url
 - What's your Google review count and star rating?
 - Who owns the current website (if any) and the GBP login?
 
-Output: filled-in `accounts` row draft + a Loom recap sent within 2 hours.
+Output: filled-in `Clients` row draft + a Loom recap sent within 2 hours.
 
 ### 6.3 Install week (5 business days)
 - **Day 1:** Contract signed via Stripe checkout ($setup + first month's $mo). GBP ownership transferred or manager access granted. Domain access confirmed.
 - **Day 2:** Vapi agent configured — voice, script, escalation number, calendar OAuth. Twilio number provisioned and forwarded to.
-- **Day 3:** One-page site deployed to `{business}.com` or a `frontdeskai.co/{slug}` fallback. GBP updated with new website + hours.
+- **Day 3:** One-page site deployed to `{business}.com` or a `gojetpakt.com/{slug}` fallback. GBP updated with new website + hours.
 - **Day 4:** Review autopilot template approved with owner. Test-fire an SMS to owner's cell.
 - **Day 5:** Live walkthrough call with owner (Zoom or in-person for core-zip A accounts). Flip forwarding on. Owner keeps direct number for regulars.
 
@@ -213,17 +190,22 @@ Break-even math: one account pays for Vapi + Twilio for the next ~13 accounts. Y
 ## 8. Milestone Plan
 
 ### Days 1–7: Foundation
-- [ ] Spin up `frontdesk-ai` repo (Next.js + FastAPI cron worker skeleton)
-- [ ] Stripe account with two products (Setup fee, Monthly bundle) — port the Stripe client from JetPakt
-- [ ] Vapi account, one demo agent for a fake plumber
-- [ ] Twilio account, kick off A2P 10DLC registration (blocks for 2–3 weeks — start now)
-- [ ] Google Workspace + Sheets CRM workbook with all six tabs and daily digest Apps Script
-- [ ] Buy `frontdeskai.co` (or chosen brand domain)
+- [x] FastAPI backend: `/api/services` catalog, `/api/webhooks/{stripe,vapi,twilio}` receivers
+- [x] `stripe_sync.AGENCY_PRODUCTS` canonical catalog (setup + monthly pairs, 5 services)
+- [x] `billing/stripe_client.py` — Stripe webhook verify/normalize (DEV_MODE without live keys)
+- [x] `jetpakt_cli` agency profile (`JETPAKT_PROFILE=agency`) — mechanism ready, Sheet/Stripe IDs are placeholders
+- [x] Marketing site (`site/index.html`) — service catalog, pricing, CTA
+- [ ] Create the AI Agency Google Sheet + 4 tabs (see §5), paste `sheet_id`/`worksheet_ids` into `config.py`
+- [ ] Stripe Dashboard: create the 9 agency products/prices from `stripe_sync.AGENCY_PRODUCTS` (lookup_keys already defined), paste resulting product IDs into `config.py`'s `STRIPE_PRODUCT_TIER`
+- [ ] Set `STRIPE_WEBHOOK_SECRET` + point a Stripe webhook endpoint at `/api/webhooks/stripe`
+- [ ] Vapi account, one demo agent for a fake plumber, point its webhook at `/api/webhooks/vapi`
+- [ ] Twilio account, kick off A2P 10DLC registration (blocks for 2–3 weeks — start now), point SMS status callback at `/api/webhooks/twilio`
+- [ ] Deploy this backend somewhere with a stable public URL (Render/Fly/etc.) so the webhook URLs above resolve
 
 ### Days 8–21: Demo assets and 1st design partner
-- [ ] Build the templated one-page site with 3 vertical variants (plumber, salon, roofer)
+- [ ] Build 3 vertical variants of the one-page site template (plumber, salon, roofer)
 - [ ] Record 3 vertical-specific Loom demos on the demo numbers
-- [ ] Source 200 leads into `leads` tab from the core zip
+- [ ] Source 200 leads into the `Prospects` tab from the core zip (Places API scan)
 - [ ] Sign one **free-pilot design partner** (no setup fee, first month free in exchange for a video testimonial). Ideal: a plumber or salon owner you already know.
 - [ ] Install the pilot end-to-end. Fix everything that breaks.
 
@@ -255,26 +237,26 @@ Break-even math: one account pays for Vapi + Twilio for the next ~13 accounts. Y
 
 ---
 
-## 10. What Happens to the JetPakt Code
+## 10. What Happened to the Old Code
 
-Since we're doing a full rewrite in a new repo, this repo (`jetpakt-marketplace`) stays where it is. Two options once the new agency is live:
-1. **Archive** the JetPakt repo on GitHub (read-only, keeps the URL alive).
-2. **Salvage list** — before archiving, port these to `frontdesk-ai`:
-   - `stripe/escrow.py` → generic Stripe client (rename module, drop the escrow-specific bits)
-   - `main.py` FastAPI app skeleton + health check
-   - `docs/OUTREACH_TEMPLATES.md`, `docs/PRICING_MODEL.md`, `docs/ROI_MODEL.md` — the frameworks apply, the numbers don't
-   - `netlify.toml` deploy pattern (or move to Vercel — recommended)
+This repo carried three prior identities before this pivot: a restaurant-ops alerting product (`docs/PRODUCT.md`'s original text), a bookkeeping marketplace (the old README/site), and — still live today — the JetPakt Pulse restaurant-reputation business (`jetpakt_cli/`). Here's what happened to each as part of this pivot:
 
-Nothing in `marketplace/`, `verification/`, or `api/routes/marketplace.py` is worth porting — that's all bookkeeping-domain logic.
+- **Bookkeeping marketplace** (`marketplace/`, `verification/`, `api/routes/marketplace.py`, `tests/test_marketplace.py`, `stripe/escrow.py`) — **deleted**. It wasn't serving either the restaurant business or the new agency; pure dead weight from an earlier, unrelated pivot. The old `stripe/escrow.py` also had a real bug (the local `stripe/` folder shadowed the pip `stripe` package on import) that's moot now that it's gone.
+- **`stripe/escrow.py`'s DEV_MODE pattern** — kept the *idea*, not the code (escrow hold/release/cancel doesn't apply to subscription billing). Rebuilt as `billing/stripe_client.py`, focused on webhook verification/normalization.
+- **`main.py` FastAPI skeleton, `netlify.toml` deploy pattern** — kept and repointed at the new routes.
+- **`jetpakt_cli/`, `stripe_sync.py`, the restaurant docs** (`ONBOARDING_PLAYBOOK.md`, `OUTREACH_TEMPLATES.md`, `GUARDRAILS.md`, `PULSE.md`, `ROS_FRAMEWORK.md`, `REPOSITION_V3_SPEC.md`, `COMPETITIVE_ANALYSIS.md`, `PRICING_MODEL.md`, `ROI_MODEL.md`, `BILLING.md`, `EMAIL_SETUP.md`, `OUTREACH_FREE_PILOT.md`) — **untouched**, still describe the live restaurant business. Nothing here was archived or deleted.
+- **`docs/PRODUCT.md`** — kept its original restaurant-ops content, with the AI Agency description added below it under a clear header rather than overwriting.
+
+Net effect: one repo, two businesses, shared mechanism where it made sense (CRM/outreach engine, Stripe sync pattern, FastAPI app) and separate data everywhere it mattered (Sheets, Stripe products, welcome copy).
 
 ---
 
 ## 11. Open Questions to Decide Before Day 1
 
-1. **Brand name:** "Front Desk AI · Parker" is a placeholder. Prefer something geo-neutral if you plan to expand past the Denver metro?
-2. **Legal entity:** existing LLC to invoice through, or set up a new one for liability separation from JetPakt?
-3. **Cell number for owner escalations:** yours during the pilot, or set up a shared on-call number from day one?
-4. **Free-pilot design partner:** do you already have one warm business owner in the 80134 area who'd say yes to a free install for a testimonial? If yes, name them — it changes the day-7 timeline.
-5. **Domain:** `frontdeskai.co`, `parkerfrontdesk.com`, something else?
+1. ~~**Brand name**~~ — **Decided: JetPakt AI.** Same brand as the restaurant business, distinguished as a separate product line.
+2. ~~**Domain**~~ — **Decided: gojetpakt.com** (the existing domain, same as the restaurant business's marketing site — reused, not a new purchase).
+3. **Legal entity:** existing LLC to invoice through, or set up a new one for liability separation from JetPakt Pulse?
+4. **Cell number for owner escalations:** yours during the pilot, or set up a shared on-call number from day one?
+5. **Free-pilot design partner:** do you already have one warm business owner in the 80134 area who'd say yes to a free install for a testimonial? If yes, name them — it changes the day-7 timeline.
 
-Answer these and days 1–7 becomes concrete tickets, not a plan.
+Three of five are resolved. Answer the remaining two and days 1–7 becomes concrete tickets, not a plan.
