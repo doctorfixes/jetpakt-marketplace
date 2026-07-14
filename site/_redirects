@@ -1,0 +1,2 @@
+/api/*  https://jetpakt-api.gojetpakt.com/:splat  200
+/dealscore/*  /dealscore/index.html  200
