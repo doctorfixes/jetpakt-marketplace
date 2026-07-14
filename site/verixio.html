@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verixio Rating Engine — Neighborhood Scoring API | JetPakt Engineering</title>
+  <meta name="description" content="Verixio: neighborhood rating engine that scores any US parcel on NTS, TCS, and VGD dimensions. Powers DealScore's enrichment layer.">
+  <style>
+    :root {
+      --bg: #0a0a0b; --surface: #141416; --surface-2: #1c1c1f;
+      --border: #27272a; --text: #f4f4f5; --text-muted: #a1a1aa;
+      --accent: #a78bfa; --accent-hover: #c4b5fd;
+      --green: #4ade80; --amber: #fbbf24; --blue: #60a5fa;
+      --radius: 12px; --radius-sm: 8px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg); color: var(--text); line-height: 1.6;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+
+    .header {
+      border-bottom: 1px solid var(--border); background: var(--surface);
+      position: sticky; top: 0; z-index: 10; backdrop-filter: blur(12px);
+    }
+    .header-inner {
+      max-width: 1100px; margin: 0 auto; padding: 0 24px;
+      height: 64px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; color: var(--text) !important; }
+    .logo-icon { font-size: 24px; }
+    .logo-tag { font-size: 11px; color: var(--text-muted); font-weight: 400; letter-spacing: 0.05em; text-transform: uppercase; }
+    .nav { display: flex; gap: 20px; align-items: center; }
+    .nav a { font-size: 14px; font-weight: 500; color: var(--text-muted); }
+    .nav a:hover { color: var(--text); }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 14px; font-weight: 600;
+      padding: 10px 20px; border-radius: var(--radius-sm);
+      transition: all 0.2s; cursor: pointer; border: none;
+    }
+    .btn-primary { background: var(--accent); color: #fff !important; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-outline {
+      background: transparent; color: var(--text) !important;
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent) !important; }
+    .btn-sm { padding: 6px 14px; font-size: 13px; }
+
+    .hero {
+      text-align: center; padding: 80px 0 48px;
+    }
+    .hero h1 { font-size: 40px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; margin-bottom: 16px; }
+    .hero h1 span { color: var(--accent); }
+    .hero-sub { font-size: 18px; color: var(--text-muted); max-width: 680px; margin: 0 auto 36px; }
+    .hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    .section { padding: 64px 0; max-width: 720px; margin: 0 auto; }
+    .section-title { font-size: 24px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+
+    .dimension-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 32px 0; }
+    .dimension-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px; text-align: center;
+    }
+    .dimension-card .icon { font-size: 32px; margin-bottom: 12px; }
+    .dimension-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+    .dimension-card .subtitle { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px; }
+    .dimension-card p { font-size: 13px; color: var(--text-muted); line-height: 1.5; }
+    .dimension-card .factors { font-size: 12px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); color: var(--text-muted); }
+
+    .pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 12px; font-weight: 600; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 4px; letter-spacing: 0.05em;
+    }
+    .pill-live { background: rgba(74, 222, 128, 0.15); color: var(--green); }
+    .pill-api { background: rgba(96, 165, 250, 0.15); color: var(--blue); }
+    .pill-backend { background: rgba(251, 191, 36, 0.15); color: var(--amber); }
+
+    .feature-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px; margin-bottom: 16px;
+    }
+    .feature-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .feature-card p { font-size: 14px; color: var(--text-muted); line-height: 1.5; }
+
+    .code-block {
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: var(--radius-sm); padding: 16px;
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, monospace;
+      font-size: 13px; line-height: 1.5; overflow-x: auto; margin: 20px 0;
+    }
+    .code-block .comment { color: #6b7280; }
+    .code-block .key { color: var(--accent); }
+    .code-block .string { color: var(--green); }
+    .code-block .number { color: var(--amber); }
+
+    .status-dot { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; color: var(--text-muted); }
+    .status-dot::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+
+    .footer {
+      border-top: 1px solid var(--border); background: var(--surface);
+    }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto; padding: 24px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 13px; color: var(--text-muted);
+    }
+    .footer-links { display: flex; gap: 16px; }
+    .footer-links a { font-size: 13px; color: var(--text-muted); }
+    .footer-links a:hover { color: var(--text); }
+
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 28px; }
+      .hero-sub { font-size: 16px; }
+      .dimension-grid { grid-template-columns: 1fr; }
+      .header-inner { padding: 0 16px; }
+      .nav { gap: 12px; }
+      .footer-inner { flex-direction: column; gap: 8px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <a href="/" class="logo"><span class="logo-icon">◈</span><span>JetPakt</span><span class="logo-tag">Engineering</span></a>
+      <nav class="nav">
+        <a href="/">Home</a>
+        <a href="/zonecheck.html">ZoneCheck</a>
+        <a href="/verixio.html">Verixio</a>
+        <a href="/#store">Store</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container">
+      <div style="margin-bottom: 20px; display: flex; gap: 8px; justify-content: center;">
+        <span class="pill pill-live">Live</span>
+        <span class="pill pill-api">REST API</span>
+        <span class="pill pill-backend">Backend Service</span>
+      </div>
+      <h1>Every Neighborhood, <span>Quantified</span></h1>
+      <p class="hero-sub">
+        Verixio is the rating engine that powers DealScore's neighborhood enrichment layer. 
+        It scores any US parcel across three composite dimensions — Nature/Transit/Service, 
+        Transport/Communication/Safety, and Vibrancy/Growth/Density.
+      </p>
+      <div class="hero-cta">
+        <a href="#dimensions" class="btn btn-primary">See the Dimensions</a>
+        <a href="#health" class="btn btn-outline">Health Check</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="dimensions">
+    <h2 class="section-title">The Three Dimension Model</h2>
+    <p style="color: var(--text-muted); font-size: 15px; margin: 8px 0 8px;">
+      Every parcel gets scored on three axes, each composed of sub-factors weighted by their 
+      statistical impact on property value and quality of life.
+    </p>
+
+    <div class="dimension-grid">
+      <div class="dimension-card" style="border-color: rgba(74, 222, 128, 0.3);">
+        <div class="icon">🌿</div>
+        <h3>NTS</h3>
+        <div class="subtitle">Nature / Transit / Service</div>
+        <p>Proximity to parks, water features, public transit stops, hospitals, fire stations, and everyday services.</p>
+        <div class="factors">Park access · Transit proximity · Hospital & fire station distance · Grocery & retail</div>
+      </div>
+      <div class="dimension-card" style="border-color: rgba(96, 165, 250, 0.3);">
+        <div class="icon">🔗</div>
+        <h3>TCS</h3>
+        <div class="subtitle">Transport / Communication / Safety</div>
+        <p>Highway access, broadband availability, crime rates, and emergency response infrastructure.</p>
+        <div class="factors">Road network density · Broadband coverage · Violent & property crime · EMS response time</div>
+      </div>
+      <div class="dimension-card" style="border-color: rgba(251, 191, 36, 0.3);">
+        <div class="icon">📈</div>
+        <h3>VGD</h3>
+        <div class="subtitle">Vibrancy / Growth / Density</div>
+        <p>Population trends, new construction permits, economic activity indicators, and neighborhood density.</p>
+        <div class="factors">Population growth · Building permits · Commercial density · Employment proximity</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="section-title">How It Works</h2>
+
+    <div class="feature-card">
+      <h3>🏗️ ArcGIS-Powered</h3>
+      <p>Verixio ingests parcel data from ArcGIS and scores each parcel against a weighted composite of ~20 sub-factors drawn from public datasets. The scoring model is deterministic and transparent — every component contributes a known weight.</p>
+    </div>
+
+    <div class="feature-card">
+      <h3>⚡ FastAPI Backend</h3>
+      <p>Built on FastAPI and deployed on Railway. Returns scores for a parcel or address in milliseconds once parcel data is loaded. The health endpoint confirms service availability.</p>
+    </div>
+
+    <div class="feature-card">
+      <h3>🔗 DealScore Integration</h3>
+      <p>Verixio runs behind DealScore's neighborhood enrichment pipeline. When DealScore scores a property, it queries Verixio for NTS/TCS/VGD ratings and folds them into the 12-factor risk model. You don't need to call Verixio directly — it's included.</p>
+    </div>
+  </section>
+
+  <section class="section" id="health">
+    <h2 class="section-title">Service Status</h2>
+    <p style="color: var(--text-muted); font-size: 15px; margin: 8px 0 24px;">
+      Verixio is a backend service tied to DealScore. Check the health endpoint to confirm it's running.
+    </p>
+    <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+      <a href="https://verixio-rating-engine-production.up.railway.app/health" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Health Check →</a>
+      <a href="https://dealscore-563.netlify.app" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Score a Property on DealScore</a>
+    </div>
+    <p style="color: var(--text-muted); font-size: 13px; margin-top: 16px;">
+      Verixio is included in every DealScore evaluation. <a href="https://dealscore-563.netlify.app">Go to DealScore</a> to see it in action.
+    </p>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>&copy; 2026 JetPakt Engineering. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="/zonecheck.html">ZoneCheck</a>
+        <a href="/verixio.html">Verixio</a>
+        <a href="https://github.com/doctorfixes" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="mailto:gojetpakt.us@outlook.com">Contact</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

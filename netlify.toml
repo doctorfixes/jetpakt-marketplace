@@ -34,3 +34,9 @@
   from = "/api/*"
   to   = "https://jetpakt-api.gojetpakt.com/:splat"
   status = 200
+
+# DealScore SPA mounted under /dealscore/ — serve index.html for client routes
+[[redirects]]
+  from = "/dealscore/*"
+  to   = "/dealscore/index.html"
+  status = 200

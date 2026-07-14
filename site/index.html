@@ -3,380 +3,494 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JetPakt — Verified Bookkeeping Marketplace</title>
-  <meta name="description" content="Post your month-end close. Bookkeepers compete. Arithmetic verification guarantees accuracy. Pay only when it balances.">
+  <title>JetPakt Engineering — Tools, Products & Digital Assets</title>
+  <meta name="description" content="JetPakt Engineering builds tools for real estate, finance, and AI. DealScore, ZoneCheck, Critiqify, Prospecting CRM, and digital prompt assets.">
   <style>
     :root {
-      --blue: #2563eb;
-      --blue-dark: #1d4ed8;
-      --slate-50: #f8fafc;
-      --slate-100: #f1f5f9;
-      --slate-200: #e2e8f0;
-      --slate-600: #475569;
-      --slate-800: #1e293b;
-      --slate-900: #0f172a;
-      --green: #22c55e;
-      --amber: #f59e0b;
+      --bg: #0a0a0b;
+      --surface: #141416;
+      --surface-2: #1c1c1f;
+      --border: #27272a;
+      --text: #f4f4f5;
+      --text-muted: #a1a1aa;
+      --accent: #a78bfa;
+      --accent-hover: #c4b5fd;
+      --green: #4ade80;
+      --amber: #fbbf24;
+      --blue: #60a5fa;
+      --radius: 12px;
+      --radius-sm: 8px;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, sans-serif;
-      color: var(--slate-800);
-      background: var(--slate-50);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
       line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
     }
+
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { color: var(--accent-hover); }
 
     .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
 
-    /* Navigation */
-    nav {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 20px 24px; max-width: 1100px; margin: 0 auto;
+    /* Header */
+    .header {
+      border-bottom: 1px solid var(--border);
+      background: var(--surface);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(12px);
     }
-    .logo { font-size: 1.5rem; font-weight: 800; color: var(--slate-900); }
-    .logo span { color: var(--blue); }
-    .nav-links { display: flex; gap: 24px; align-items: center; }
-    .nav-links a { color: var(--slate-600); text-decoration: none; font-size: 0.95rem; }
-    .nav-links a:hover { color: var(--slate-900); }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text) !important;
+    }
+
+    .logo-icon { font-size: 24px; }
+    .logo-tag {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-left: 4px;
+    }
+
+    .nav { display: flex; gap: 20px; align-items: center; }
+    .nav a { font-size: 14px; font-weight: 500; color: var(--text-muted); }
+    .nav a:hover { color: var(--text); }
 
     .btn {
-      display: inline-flex; align-items: center; justify-content: center;
-      padding: 12px 28px; border-radius: 8px; font-weight: 600; font-size: 0.95rem;
-      cursor: pointer; border: none; text-decoration: none; transition: all 0.2s;
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 14px; font-weight: 600;
+      padding: 10px 20px; border-radius: var(--radius-sm);
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
     }
-    .btn-primary { background: var(--blue); color: white; }
-    .btn-primary:hover { background: var(--blue-dark); transform: translateY(-1px); }
-    .btn-outline { border: 2px solid var(--slate-200); color: var(--slate-800); background: white; }
-    .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
+    .btn-primary { background: var(--accent); color: #fff !important; }
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-outline {
+      background: transparent; color: var(--text) !important;
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent) !important; }
+    .btn-sm { padding: 6px 14px; font-size: 13px; }
 
     /* Hero */
     .hero {
-      text-align: center; padding: 80px 0 60px;
-      background: linear-gradient(180deg, var(--slate-50) 0%, white 100%);
+      text-align: center;
+      padding: 80px 0 48px;
     }
-    .hero h1 { font-size: 3rem; font-weight: 800; color: var(--slate-900); line-height: 1.15; max-width: 800px; margin: 0 auto 20px; }
-    .hero h1 span { color: var(--blue); }
-    .hero p { font-size: 1.2rem; color: var(--slate-600); max-width: 600px; margin: 0 auto 36px; }
-    .hero-cta { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-    .hero-cta .btn { min-width: 180px; }
 
-    /* How it works */
-    .section { padding: 80px 0; }
-    .section-alt { background: white; }
-    .section h2 { text-align: center; font-size: 2rem; font-weight: 700; margin-bottom: 50px; }
+    .hero h1 {
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
 
-    .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
-    .step {
-      background: white; border: 1px solid var(--slate-200); border-radius: 12px;
-      padding: 32px; transition: box-shadow 0.2s;
-    }
-    .step:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
-    .step-num {
-      width: 40px; height: 40px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 1.1rem; margin-bottom: 16px;
-      background: var(--blue); color: white;
-    }
-    .step:nth-child(2) .step-num { background: var(--green); }
-    .step:nth-child(3) .step-num { background: var(--amber); }
-    .step h3 { font-size: 1.2rem; margin-bottom: 8px; }
-    .step p { color: var(--slate-600); font-size: 0.95rem; }
-    .step .arrow { margin-top: 16px; color: var(--blue); font-weight: 600; font-size: 0.9rem; }
+    .hero h1 span { color: var(--accent); }
 
-    /* Verification moat */
-    .moat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
-    .moat-text h2 { text-align: left; margin-bottom: 20px; }
-    .moat-text p { color: var(--slate-600); margin-bottom: 16px; font-size: 1.05rem; }
-    .moat-check { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
-    .moat-check-icon { color: var(--green); font-weight: bold; font-size: 1.2rem; min-width: 24px; }
-    .moat-check p { margin-bottom: 0; }
-    .moat-visual {
-      background: var(--slate-900); color: var(--green); border-radius: 12px;
-      padding: 32px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.9rem; line-height: 1.8;
+    .hero-sub {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 36px;
     }
-    .moat-visual .pass { color: var(--green); }
-    .moat-visual .fail { color: #ef4444; }
-    .moat-visual .check { color: var(--slate-200); }
-    .moat-visual .label { color: var(--slate-600); }
 
-    /* For owners */
-    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
-    .card {
-      background: white; border: 1px solid var(--slate-200); border-radius: 12px; padding: 40px;
-    }
-    .card h3 { font-size: 1.4rem; margin-bottom: 16px; }
-    .card ul { list-style: none; }
-    .card ul li { padding: 8px 0; color: var(--slate-600); display: flex; gap: 10px; }
-    .card ul li::before { content: "✓"; color: var(--green); font-weight: bold; }
+    .hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
 
-    /* Pricing */
-    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-    .pricing-card {
-      background: white; border: 1px solid var(--slate-200); border-radius: 12px; padding: 36px;
-      text-align: center; transition: box-shadow 0.2s;
+    /* Section */
+    .section { padding: 64px 0; }
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    .pricing-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
-    .pricing-card.featured {
-      border-color: var(--blue); box-shadow: 0 4px 20px rgba(37,99,235,0.1);
-      position: relative;
-    }
-    .pricing-card.featured::before {
-      content: "Most Popular"; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-      background: var(--blue); color: white; padding: 4px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: 600;
-    }
-    .pricing-card .price { font-size: 2.5rem; font-weight: 800; color: var(--slate-900); margin: 16px 0; }
-    .pricing-card .price span { font-size: 1rem; color: var(--slate-600); font-weight: 400; }
-    .pricing-card .subtitle { color: var(--slate-600); margin-bottom: 24px; font-size: 0.95rem; }
-    .pricing-card ul { text-align: left; list-style: none; margin-bottom: 28px; }
-    .pricing-card ul li { padding: 6px 0; color: var(--slate-600); font-size: 0.9rem; display: flex; gap: 8px; }
-    .pricing-card ul li::before { content: "✓"; color: var(--green); font-weight: bold; }
-    .pricing-card .btn { width: 100%; }
+    .section-desc { color: var(--text-muted); font-size: 15px; margin-bottom: 36px; }
 
-    /* CTA */
-    .cta-section {
-      text-align: center; padding: 80px 0;
-      background: linear-gradient(180deg, white, var(--slate-50));
+    /* Tool Cards */
+    .tools-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+
+    .tool-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: border-color 0.2s, transform 0.2s;
     }
-    .cta-section h2 { font-size: 2rem; margin-bottom: 16px; }
-    .cta-section p { color: var(--slate-600); margin-bottom: 32px; max-width: 500px; margin-left: auto; margin-right: auto; }
+
+    .tool-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .tool-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-bottom: 14px;
+    }
+
+    .badge-saas { background: rgba(96, 165, 250, 0.15); color: var(--blue); }
+    .badge-digital { background: rgba(167, 139, 250, 0.15); color: var(--accent); }
+
+    .tool-name { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    .tool-desc { font-size: 14px; color: var(--text-muted); line-height: 1.5; margin-bottom: 16px; }
+
+    .tool-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .tool-tag {
+      font-size: 11px;
+      color: var(--text-muted);
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 8px;
+    }
+
+    .tool-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .tool-price {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .tool-caption { font-size: 12px; color: var(--text-muted); }
+
+    /* Status dots */
+    .status { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; }
+    .status-live::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+    .status-oss::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--amber); }
+    .status-pipeline::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--blue); }
+
+    /* Gumroad embed section */
+    .store-link-card {
+      background: linear-gradient(135deg, var(--surface) 0%, var(--surface-2) 100%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px;
+      text-align: center;
+    }
+
+    .store-link-card h3 { font-size: 22px; margin-bottom: 12px; }
+    .store-link-card p { color: var(--text-muted); margin-bottom: 24px; max-width: 500px; margin-left: auto; margin-right: auto; }
+
+    .products-mini {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+      margin: 32px 0;
+      text-align: left;
+    }
+
+    .product-mini {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      transition: border-color 0.2s;
+    }
+
+    .product-mini:hover { border-color: var(--accent); }
+    .product-mini-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .product-mini-desc { font-size: 12px; color: var(--text-muted); line-height: 1.4; }
+    .product-mini-price { font-size: 15px; font-weight: 700; color: var(--accent); margin-top: 8px; }
 
     /* Footer */
-    footer { text-align: center; padding: 40px 0; color: var(--slate-600); font-size: 0.85rem; border-top: 1px solid var(--slate-200); }
+    .footer {
+      border-top: 1px solid var(--border);
+      background: var(--surface);
+    }
 
-    @media (max-width: 768px) {
-      .hero h1 { font-size: 2rem; }
-      .hero { padding: 60px 0 40px; }
-      .moat-grid, .two-col { grid-template-columns: 1fr; }
-      nav { flex-direction: column; gap: 16px; }
-      .nav-links { flex-wrap: wrap; justify-content: center; }
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .footer-links { display: flex; gap: 16px; }
+    .footer-links a { font-size: 13px; color: var(--text-muted); }
+    .footer-links a:hover { color: var(--text); }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .hero h1 { font-size: 28px; }
+      .hero-sub { font-size: 16px; }
+      .tools-grid { grid-template-columns: 1fr; }
+      .products-mini { grid-template-columns: 1fr 1fr; }
+      .header-inner { padding: 0 16px; }
+      .nav { gap: 12px; }
+      .footer-inner { flex-direction: column; gap: 8px; text-align: center; }
     }
   </style>
 </head>
 <body>
-  <nav>
-    <div class="logo">Jet<span>Pakt</span></div>
-    <div class="nav-links">
-      <a href="#how-it-works">How It Works</a>
-      <a href="#owners">For Owners</a>
-      <a href="#bookkeepers">For Bookkeepers</a>
-      <a href="#pricing">Pricing</a>
-      <a href="mailto:gojetpakt.us@outlook.com">Contact</a>
-      <a href="#" class="btn btn-primary">Get Started</a>
+  <header class="header">
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <span class="logo-icon">◈</span>
+        <span>JetPakt</span>
+        <span class="logo-tag">Engineering</span>
+      </a>
+      <nav class="nav">
+        <a href="#tools">Tools</a>
+        <a href="#store">Store</a>
+        <a href="https://jetpakt4.gumroad.com" target="_blank" rel="noopener noreferrer">Gumroad</a>
+      </nav>
     </div>
-  </nav>
+  </header>
 
   <section class="hero">
     <div class="container">
-      <h1>Post your books. Bookkeepers compete.<br>Arithmetic <span>verifies</span> the result.</h1>
-      <p>The first marketplace where bookkeeping accuracy is guaranteed by automated arithmetic checks — not trust or reputation.</p>
+      <h1>Build. Deploy. <span>Ship.</span></h1>
+      <p class="hero-sub">
+        JetPakt Engineering — practical tools for real estate analysis, financial auditing,
+        lead generation, and AI workflows. Every product is built, deployed, and maintained by a solo engineer.
+      </p>
       <div class="hero-cta">
-        <a href="#" class="btn btn-primary">I Need a Bookkeeper</a>
-        <a href="#" class="btn btn-outline">I Am a Bookkeeper</a>
+        <a href="#tools" class="btn btn-primary">Browse Tools</a>
+        <a href="#store" class="btn btn-outline">Digital Store</a>
       </div>
     </div>
   </section>
 
-  <section class="section section-alt" id="how-it-works">
+  <!-- SaaS Tools Section -->
+  <section class="section" id="tools">
     <div class="container">
-      <h2>How the Marketplace Works</h2>
-      <div class="steps">
-        <div class="step">
-          <div class="step-num">1</div>
-          <h3>Post Your Close</h3>
-          <p>Describe your month-end close, upload your chart of accounts and bank statements, and set your budget. Bookkeepers see exactly what's needed.</p>
-          <div class="arrow">Post →</div>
-        </div>
-        <div class="step">
-          <div class="step-num">2</div>
-          <h3>Bookkeepers Bid</h3>
-          <p>Vetted bookkeepers review your post and compete on price and turnaround. You pick the best fit — not the algorithm.</p>
-          <div class="arrow">Bid →</div>
-        </div>
-        <div class="step">
-          <div class="step-num">3</div>
-          <h3>Escrow &amp; Execute</h3>
-          <p>Payment goes into Stripe escrow. The bookkeeper reconciles your accounts while you know the funds are safe.</p>
-          <div class="arrow">Escrow → Execute</div>
-        </div>
-        <div class="step">
-          <div class="step-num">4</div>
-          <h3>Verify &amp; Settle</h3>
-          <p>Our verification engine runs binary arithmetic checks. Debits = credits. Bank statements match. Periods balance. Only then does payment release.</p>
-          <div class="arrow">Verify → Settle</div>
-        </div>
-      </div>
-    </div>
-  </section>
+      <h2 class="section-title">⟐ Engineering Tools</h2>
+      <p class="section-desc">Live SaaS applications, APIs, and data pipelines. Free to try; pay only for what you use.</p>
 
-  <section class="section" id="verification">
-    <div class="container">
-      <div class="moat-grid">
-        <div class="moat-text">
-          <h2>The Verification Moat</h2>
-          <p>Every transaction is checked by automated arithmetic — <strong>not subjective judgment</strong>. Either the numbers balance or they don't.</p>
-          <p>This is the core innovation: make accuracy the only path to settlement. No reputation system, no star ratings, no he-said-she-said. Just math.</p>
-          <div class="moat-check">
-            <div class="moat-check-icon">✓</div>
-            <p><strong>Debits = Credits</strong> — The fundamental accounting identity. If they don't match, it doesn't settle.</p>
+      <div class="tools-grid">
+
+        <!-- DealScore -->
+        <div class="tool-card">
+          <div class="tool-badge badge-saas">Live App</div>
+          <div class="tool-name">DealScore</div>
+          <div class="tool-desc">
+            Enter any commercial property address and get a 12-factor risk score with
+            written analysis in under 30 seconds. Powered by RAG + OpenRouter LLM
+            and enriched with neighborhood data.
           </div>
-          <div class="moat-check">
-            <div class="moat-check-icon">✓</div>
-            <p><strong>Bank Statement Match</strong> — Cash balance must match the bank's ending balance within tolerance.</p>
+          <div class="tool-meta">
+            <span class="tool-tag">Real Estate</span>
+            <span class="tool-tag">LLM Scoring</span>
+            <span class="tool-tag">RAG</span>
+            <span class="status status-live">Live</span>
           </div>
-          <div class="moat-check">
-            <div class="moat-check-icon">✓</div>
-            <p><strong>Period Carry-Forward</strong> — Retained earnings correctly reflect the period's net change.</p>
-          </div>
-          <div class="moat-check">
-            <div class="moat-check-icon">✓</div>
-            <p><strong>Non-Negative Assets</strong> — Asset accounts cannot go negative. No creative accounting.</p>
+          <div class="tool-footer">
+            <span class="tool-caption">Free trial available</span>
+            <a href="/dealscore/" class="btn btn-primary btn-sm">Try DealScore →</a>
           </div>
         </div>
-        <div class="moat-visual">
-          <div class="label"># Verification Report — gojetpakt.com/verify/tx_abc123</div>
-          <br>
-          <div class="check">[PASS] debits_equal_credits</div>
-          <div class="check">  Total debits: $12,450.00</div>
-          <div class="check">  Total credits: $12,450.00</div>
-          <br>
-          <div class="check">[SKIP] bank_statement_match</div>
-          <div class="check">  No bank statement provided</div>
-          <br>
-          <div class="check">[PASS] period_balance</div>
-          <div class="check">  Retained earnings: $45,200.00</div>
-          <br>
-          <div class="check">[PASS] non_negative_assets</div>
-          <div class="check">  All asset accounts non-negative</div>
-          <br>
-          <div class="pass">✓ VERIFIED — 4/5 pass, 1 skip, 0 fail</div>
-          <div class="pass">  Ready to settle. Payment releasing.</div>
+
+        <!-- ZoneCheck -->
+        <div class="tool-card">
+          <div class="tool-badge badge-saas">API</div>
+          <div class="tool-name">ZoneCheck</div>
+          <div class="tool-desc">
+            FEMA flood zone + neighborhood risk enrichment API. Pass any US address
+            and get flood risk classification, school ratings, crime stats, and
+            transit access — all in one call. Integrated into DealScore scoring.
+          </div>
+          <div class="tool-meta">
+            <span class="tool-tag">Flood Risk</span>
+            <span class="tool-tag">FEMA</span>
+            <span class="tool-tag">Neighborhood</span>
+            <span class="status status-live">Live</span>
+          </div>
+          <div class="tool-footer">
+            <span class="tool-caption">Free tier: 50 req/mo</span>
+            <a href="/zonecheck.html" class="btn btn-outline btn-sm">Learn More →</a>
+          </div>
         </div>
+
+        <!-- Critiqify -->
+        <div class="tool-card">
+          <div class="tool-badge badge-saas">Live App</div>
+          <div class="tool-name">Critiqify</div>
+          <div class="tool-desc">
+            Financial audit platform purpose-built for hospitality. Upload a P&amp;L,
+            get variance analysis across periods, compare against USALI-standard chart
+            of accounts, and generate owner-ready reports in minutes.
+          </div>
+          <div class="tool-meta">
+            <span class="tool-tag">Hospitality</span>
+            <span class="tool-tag">Financial Audit</span>
+            <span class="tool-tag">USALI</span>
+            <span class="status status-live">Live</span>
+          </div>
+          <div class="tool-footer">
+            <span class="tool-caption">5 free analyses / mo</span>
+            <a href="https://critiqify.com" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">Try Critiqify →</a>
+          </div>
+        </div>
+
+        <!-- Verixio Rating Engine -->
+        <div class="tool-card">
+          <div class="tool-badge badge-saas">API</div>
+          <div class="tool-name">Verixio Rating Engine</div>
+          <div class="tool-desc">
+            Neighborhood rating engine that scores any US parcel on NTS (Nature/Transit/Service),
+            TCS (Transport/Communication/Safety), and VGD (Vibrancy/Growth/Density) dimensions.
+            Powers DealScore's neighborhood enrichment layer.
+          </div>
+          <div class="tool-meta">
+            <span class="tool-tag">Neighborhood Data</span>
+            <span class="tool-tag">Scoring</span>
+            <span class="tool-tag">ArcGIS</span>
+            <span class="status status-live">Live</span>
+          </div>
+          <div class="tool-footer">
+            <span class="tool-caption">Powers DealScore enrichment</span>
+            <a href="/verixio.html" class="btn btn-outline btn-sm">Learn More →</a>
+          </div>
+        </div>
+
+        <!-- Prospecting CRM -->
+        <div class="tool-card">
+          <div class="tool-badge badge-saas">Pipeline</div>
+          <div class="tool-name">Prospecting CRM</div>
+          <div class="tool-desc">
+            AI-powered lead enrichment pipeline. Scrape contacts from any source,
+            enrich with firmographic + psychographic data using 6 Human Needs
+            framing, and generate personalized cold email sequences automatically.
+          </div>
+          <div class="tool-meta">
+            <span class="tool-tag">Lead Gen</span>
+            <span class="tool-tag">Enrichment</span>
+            <span class="tool-tag">n8n</span>
+            <span class="status status-pipeline">In Development</span>
+          </div>
+          <div class="tool-footer">
+            <span class="tool-caption">Coming soon — in active development</span>
+            <a href="https://github.com/doctorfixes/prospecting-crm" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-sm">View on GitHub →</a>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
 
-  <section class="section section-alt" id="owners">
+  <!-- Digital Store Section -->
+  <section class="section" id="store">
     <div class="container">
-      <h2>For Business Owners</h2>
-      <div class="two-col">
-        <div class="card">
-          <h3>Post a Close</h3>
-          <ul>
-            <li>Describe your month-end close in plain language</li>
-            <li>Upload your chart of accounts and bank statements</li>
-            <li>Set your budget — bookkeepers compete on price</li>
-            <li>Payment held in Stripe escrow until verification passes</li>
-            <li>Get a verification report proving everything balances</li>
-          </ul>
-          <br>
-          <a href="#" class="btn btn-primary">Post Your Close</a>
+      <h2 class="section-title">⟐ Digital Store</h2>
+      <p class="section-desc">Ready-to-use prompt stacks, playbooks, and automation templates. Download and use immediately.</p>
+
+      <div class="store-link-card">
+        <h3>AI Prompt Stacks for Professionals</h3>
+        <p>
+          Ready-to-use prompt collections built for real workflows.
+          Copy, paste, fill in your data, get results.
+        </p>
+
+        <div class="products-mini">
+          <div class="product-mini">
+            <div class="product-mini-name">AI Output Verification Toolkit</div>
+            <div class="product-mini-desc">7 patterns to spot AI hallucinations before they cost you. For Claude, ChatGPT, Gemini.</div>
+            <div class="product-mini-price">$1</div>
+          </div>
+          <div class="product-mini">
+            <div class="product-mini-name">Context Window Architect</div>
+            <div class="product-mini-desc">5 prompt frameworks that give LLMs perfect context on every generation.</div>
+            <div class="product-mini-price">$1</div>
+          </div>
+          <div class="product-mini">
+            <div class="product-mini-name">Cursor Debugging Playbook</div>
+            <div class="product-mini-desc">10 prompt templates that fix AI-generated code without rewriting everything.</div>
+            <div class="product-mini-price">$1</div>
+          </div>
+          <div class="product-mini">
+            <div class="product-mini-name">5 Agentic n8n Workflows</div>
+            <div class="product-mini-desc">Full n8n workflows: AI research assistant, lead scorer, report generator, and more.</div>
+            <div class="product-mini-price">$1</div>
+          </div>
+          <div class="product-mini">
+            <div class="product-mini-name">Hotel Variance Narratives</div>
+            <div class="product-mini-desc">5 AI prompts that turn P&amp;L variance data into boardroom-ready explanations.</div>
+            <div class="product-mini-price">$1</div>
+          </div>
+          <div class="product-mini">
+            <div class="product-mini-name">One-Click Supabase Setup</div>
+            <div class="product-mini-desc">Zero to auth + RLS + migrations in one terminal command. Save 3 hours on every project.</div>
+            <div class="product-mini-price">$1</div>
+          </div>
+          <div class="product-mini">
+            <div class="product-mini-name">ACS Playbook</div>
+            <div class="product-mini-desc">The Adaptive Compounding System — a meta-OS for creators, builders, and solo operators.</div>
+            <div class="product-mini-price">$4</div>
+          </div>
+          <div class="product-mini">
+            <div class="product-mini-name">Health &amp; Life Sciences Stack</div>
+            <div class="product-mini-desc">50+ prompts for clinical documentation, systematic reviews, and research writing.</div>
+            <div class="product-mini-price">$3</div>
+          </div>
+          <div class="product-mini">
+            <div class="product-mini-name">GM Prompt Stack</div>
+            <div class="product-mini-desc">50 AI prompts purpose-built for hotel general managers. Revenue, ops, HR, and more.</div>
+            <div class="product-mini-price">$2.50</div>
+          </div>
         </div>
-        <div class="card">
-          <h3>Why JetPakt?</h3>
-          <ul>
-            <li>You choose the bookkeeper — we don't auto-assign</li>
-            <li>No lock-in. Post once or use it every month.</li>
-            <li>Arithmetic verification means no trust required</li>
-            <li>Stripe escrow means no payment risk</li>
-            <li>10% platform fee includes verification and escrow</li>
-          </ul>
-        </div>
+
+        <a href="https://jetpakt-store.netlify.app" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Browse Full Store →</a>
+        <span style="margin: 0 8px; color: var(--text-muted); font-size: 13px;">or</span>
+        <a href="https://jetpakt4.gumroad.com" target="_blank" rel="noopener noreferrer" class="btn btn-outline">View on Gumroad</a>
       </div>
     </div>
   </section>
 
-  <section class="section" id="bookkeepers">
-    <div class="container">
-      <h2>For Bookkeepers</h2>
-      <div class="two-col">
-        <div class="card">
-          <h3>Earn What You're Worth</h3>
-          <ul>
-            <li>Set your own prices and turnaround times</li>
-            <li>Work when you want — pick the closes that fit</li>
-            <li>Build a verified accuracy score (not just ratings)</li>
-            <li>Higher accuracy = higher-tier jobs</li>
-            <li>Get paid fast once verification passes</li>
-          </ul>
-          <br>
-          <a href="#" class="btn btn-primary">Apply as a Bookkeeper</a>
-        </div>
-        <div class="card">
-          <h3>How Trust Works</h3>
-          <p style="color: var(--slate-600); margin-bottom: 16px;">On JetPakt, your reputation is built on numbers — not opinions.</p>
-          <ul>
-            <li><strong>Accuracy score</strong> — 100% means every job passed verification</li>
-            <li><strong>Tier progression</strong> — Starter → Professional → Senior as you prove accuracy</li>
-            <li><strong>No star-chasing</strong> — No need to beg for reviews. Just do accurate work.</li>
-            <li>Disputes are rare because verification catches errors before settlement</li>
-          </ul>
-        </div>
+  <footer class="footer">
+    <div class="footer-inner">
+      <p>&copy; 2026 JetPakt Engineering. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="https://github.com/doctorfixes" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="https://jetpakt4.gumroad.com" target="_blank" rel="noopener noreferrer">Gumroad</a>
+        <a href="/zonecheck.html">ZoneCheck</a>
+        <a href="/verixio.html">Verixio</a>
+        <a href="mailto:gojetpakt.us@outlook.com">Contact</a>
       </div>
-    </div>
-  </section>
-
-  <section class="section section-alt" id="pricing">
-    <div class="container">
-      <h2>Simple Pricing</h2>
-      <div class="pricing-grid">
-        <div class="pricing-card">
-          <h3>Starter</h3>
-          <div class="price">$150<span>/close</span></div>
-          <div class="subtitle">One-time month-end close</div>
-          <ul>
-            <li>Single period reconciliation</li>
-            <li>Basic verification (3 checks)</li>
-            <li>Standard turnaround (7 days)</li>
-            <li>Email support</li>
-          </ul>
-          <a href="#" class="btn btn-outline">Post a Close</a>
-        </div>
-        <div class="pricing-card featured">
-          <h3>Professional</h3>
-          <div class="price">$100<span>/close</span></div>
-          <div class="subtitle">Monthly recurring — billed quarterly</div>
-          <ul>
-            <li>Monthly month-end closes</li>
-            <li>Full verification suite (5 checks)</li>
-            <li>Priority turnaround (3 days)</li>
-            <li>Bank statement matching</li>
-            <li>Dedicated bookkeeper</li>
-          </ul>
-          <a href="#" class="btn btn-primary">Get Started</a>
-        </div>
-        <div class="pricing-card">
-          <h3>Enterprise</h3>
-          <div class="price">Custom</div>
-          <div class="subtitle">Multiple entities, complex structures</div>
-          <ul>
-            <li>Multi-entity consolidation</li>
-            <li>Custom verification rules</li>
-            <li>Same-day turnaround</li>
-            <li>API access</li>
-            <li>Dedicated account manager</li>
-          </ul>
-          <a href="mailto:gojetpakt.us@outlook.com" class="btn btn-outline">Contact Us</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section class="cta-section">
-    <div class="container">
-      <h2>Ready to reconcile?</h2>
-      <p>Post your first close. Bookkeepers will start bidding within hours. Payment only releases when the numbers balance.</p>
-      <div class="hero-cta">
-        <a href="#" class="btn btn-primary">Post a Close</a>
-        <a href="#" class="btn btn-outline">Learn How It Works</a>
-      </div>
-    </div>
-  </section>
-
-  <footer>
-    <div class="container">
-      <p>© 2026 JetPakt.  gojetpakt.com.  Built on Stripe escrow + arithmetic verification.</p>
     </div>
   </footer>
 </body>
